@@ -34,7 +34,7 @@ class Tidal
   private
   
   def check_logged
-    if ALWAYS_LOGGED || @user_logged
+    if ENV['ALWAYS_LOGGED'] || @user_logged
       true
     else
       redirect '/login'
@@ -43,7 +43,7 @@ class Tidal
   end
 
   def check_logged_ajax
-    if ALWAYS_LOGGED || @user_logged
+    if ENV['ALWAYS_LOGGED'] || @user_logged
       true
     else
       body 'Logged users only'
