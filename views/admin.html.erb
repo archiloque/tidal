@@ -24,6 +24,7 @@
                   <input id="category_text" name="category_text" type="text" value="" size="10"/>
                 <li>
                   <%= input_checkbox('display_content', 'Display Content', true) %>
+                  <%= input_checkbox('public', 'Public', true) %>
               </ul>
               <input name="add" type="submit" value="Add"/>
             </fieldset>
@@ -40,6 +41,7 @@
                   <%= input_text('name', 'Name') %>
                   <%= input_text('category', 'Category') %>
                   <%= input_checkbox('display_content', 'Display Content', true) %>
+                  <%= input_checkbox('public', 'Public', true) %>
                 </ul>
                 <input name="update" type="submit" value="Update"/>
               </fieldset>
@@ -100,6 +102,7 @@
                   <th>Category</th>
                   <th>Name</th>
                   <th>Display content</th>
+                  <th>Public</th>
                   <th>Last update</th>
                   <th>Site URI</th>
                   <th>Feed URI</th>
@@ -111,6 +114,7 @@
                     <td><%= feed.category %></td>
                     <td><%= feed.name %></td>
                     <td><%= feed.display_content ? 'yes' : 'no' %></td>
+                    <td><%= feed.public ? 'yes' : 'no' %></td>
                     <td><%= display_date_time(feed.last_notification) %></td>
                     <td><%= "<a href=\"#{feed.site_uri}\">#{feed.site_uri}</a>" %></td>
                     <td><%= "<a href=\"#{feed.feed_uri}\">#{feed.feed_uri}</a>" %></td>

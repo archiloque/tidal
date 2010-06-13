@@ -22,6 +22,7 @@ migration 'create table feeds' do
     String :feed_uri, :size => 250, :null => false
     boolean :display_content, :null => false
     DateTime :last_notification, :null => true
+    boolean :public, :null => false
   end
 end
 
@@ -61,6 +62,8 @@ class Feed < Sequel::Model
     validates_presence :name
     validates_presence :site_uri
     validates_presence :feed_uri
+    validates_presence :public
+    validates_presence :display_content
 
     begin
       URI.parse site_uri

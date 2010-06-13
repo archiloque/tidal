@@ -18,7 +18,8 @@ class Tidal
                            :category => category,
                            :site_uri => params[:site_uri],
                            :feed_uri => params[:feed_uri],
-                           :display_content => params[:display_content])
+                           :display_content => params[:display_content],
+                           :public => params[:public])
         result = superfeedr_request(params[:feed_uri], feed.id, 'subscribe')
         if result.code == 202
           flash[:notice] = 'Feed added'
@@ -58,7 +59,8 @@ class Tidal
         begin
           feed.update(:name => params[:name],
                       :category => params[:category],
-                      :display_content => params[:display_content])
+                      :display_content => params[:display_content],
+                      :public => params[:public])
           flash[:notice] = 'Feed updated'
         rescue Sequel::ValidationFailed => e
           flash[:error] = "Error during feed update #{e}"
@@ -96,7 +98,8 @@ class Tidal
                              :category => outline.parent['text'] || '',
                              :site_uri => site_uri,
                              :feed_uri => outline['xmlUrl'],
-                             :display_content => true)
+                             :display_content => true,
+                             :public => true)
           added_feeds << [outline['xmlUrl'], feed.id]
           feeds_number += 1
         end
