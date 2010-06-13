@@ -73,7 +73,39 @@ class Tidal
   post '/admin/rename_category' do
     if check_logged
       Feed.where(:category => params[:category_before]).update(:category => params[:category_after])
-      flash[:notice] = "Category renamed"
+      flash[:notice] = 'Category renamed'
+      redirect '/admin'
+    end
+  end
+
+  post '/admin/upload_opml' do
+    if check_logged
+      feeds_number = 0
+      duplicates_number = 0
+      added_feeds = []
+      Nokogiri::XML(params[:file][:tempfile]).css('outline[xmlUrl]').each do |outline|
+        if Feed.where(:site_uri => outline['htmlUrl']).first
+          duplicates += 1
+        else
+          site_uri = outline['htmlUrl']
+          if site_uri.blank?
+            feed = URI.parse(outline['xmlUrl'])
+            site_uri = "#{feed.scheme}://#{feed.host}#{(feed.port == 80) ? '' : ":#{feed.port}"}/"
+          end
+          feed = Feed.create(:name => outline['title'],
+                             :category => outline.parent['text'] || '',
+                             :site_uri => site_uri,
+                             :feed_uri => outline['xmlUrl'],
+                             :display_content => true)
+          added_feeds << [outline['xmlUrl'], feed.id]
+          feeds_number += 1
+        end
+      end
+      added_feeds.each do |f|
+        superfeedr_request(f[0], f[1], 'subscribe')
+      end
+
+      flash[:notice] = "#{feeds_number.to_s} feeds added and #{duplicates_number} duplicates"
       redirect '/admin'
     end
   end

@@ -2,7 +2,7 @@
   <div id="pageTitle">Configuration</div>
 
   <div id="adminLeft">
-    <form action="/admin/add" method="post" class="adminFormLeft">
+    <form action="/admin/add" method="post">
       <fieldset>
         <legend>Add a feed</legend>
         <ul>
@@ -23,14 +23,14 @@
           <li>
             <%= input_checkbox('display_content', 'Display Content', true) %>
         </ul>
-        <input name="commit" type="submit" value="Add"/>
+        <input name="add" type="submit" value="Add"/>
       </fieldset>
     </form>
 
     <% any_feed = !@feeds.empty? %>
 
     <% if any_feed %>
-      <form action="/admin/edit_feed" method="post" class="adminFormLeft">
+      <form action="/admin/edit_feed" method="post">
         <fieldset>
           <legend>Edit a feed</legend>
           <ul>
@@ -39,21 +39,21 @@
             <%= input_text('category', 'Category') %>
             <%= input_checkbox('display_content', 'Display Content', true) %>
           </ul>
-          <input name="commit" type="submit" value="Update"/>
+          <input name="update" type="submit" value="Update"/>
         </fieldset>
       </form>
 
-      <form action="/admin/remove" method="post" class="adminFormLeft" onsubmit="return confirm('Are you sure you want to delete this feed ?');">
+      <form action="/admin/remove" method="post" onsubmit="return confirm('Are you sure you want to delete this feed ?');">
         <fieldset>
           <legend>Remove a feed</legend>
           <ul>
             <%= display_feeds_select(@feeds) %>
           </ul>
-          <input name="commit" type="submit" value="Remove"/>
+          <input name="remove" type="submit" value="Remove"/>
         </fieldset>
       </form>
 
-      <form action="/admin/rename_category" method="post" class="adminFormLeft" onsubmit="return confirm('Are you sure you want to rename this category ?');">
+      <form action="/admin/rename_category" method="post" onsubmit="return confirm('Are you sure you want to rename this category ?');">
         <fieldset>
           <legend>Rename a category</legend>
           <ul>
@@ -69,13 +69,24 @@
             </li>
             <li><%= input_text('category_after', 'To') %></li>
           </ul>
-          <input name="commit" type="submit" value="Rename"/>
+          <input name="rename" type="submit" value="Rename"/>
         </fieldset>
       </form>
 
     <% end %>
 
+    <form action="/admin/upload_opml" enctype="multipart/form-data" method="post">
+      <fieldset>
+        <legend>Upload an opml file</legend>
+        <ul>
+          <%= input_file('file', 'OPML file') %>
+        </ul>
+        <input name="upload" type="submit" value="Upload"/>
+      </fieldset>
+    </form>
+
   </div>
+
   <div id="adminRight">
     <form>
       <fieldset>

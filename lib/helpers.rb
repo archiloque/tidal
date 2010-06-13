@@ -30,6 +30,11 @@ module Sinatra
               "<input id=\"#{name}\" name=\"#{name}\" type=\"text\" value=\"#{value}\"#{size ? " size=\"#{size}\"" : ''}/><li>"
     end
 
+    def input_file(name, label)
+      "<li><label for=\"#{name}\">#{label}</label>" +
+              "<input id=\"#{name}\" name=\"#{name}\" type=\"file\"/><li>"
+    end
+
     def input_checkbox(name, label, value = false)
       "<li><label for=\"#{name}\">#{label}</label>" +
               "<input name=\"#{name}\" type=\"checkbox\"#{value ? ' checked="checked"' : ''}\"/></li>"
