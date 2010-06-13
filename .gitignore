@@ -1,0 +1,5 @@
+.bundle
+.idea/*.*
+.idea/**/*.*
+tidal.sqlite3*
+test.rb

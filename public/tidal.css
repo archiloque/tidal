@@ -1,0 +1,51 @@
+body {
+  background-color: #EEEEEE;
+  font-family: Helvetica, "Helvetica Neue", "Lucida Grande", Verdana, sans-serif;
+  font-size: 12px;
+  color: #111111;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+img {
+  border: 0;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+  background-color: #E0E0E0;
+  padding-right: 2px;
+  padding-left: 2px;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+#messages {
+  position: absolute;
+  top: 0;
+  color: black;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+#notice {
+  border: 2px solid green;
+  padding: 2px;
+}
+
+#warning {
+  border: 2px solid orange;
+  padding: 2px;
+}
+
+#error {
+  border: 2px solid red;
+  padding: 2px;
+}

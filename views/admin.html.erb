@@ -1,0 +1,111 @@
+<div id="adminContent">
+  <div id="pageTitle">Configuration</div>
+
+  <div id="adminLeft">
+    <form action="/admin/add" method="post" class="adminFormLeft">
+      <fieldset>
+        <legend>Add a feed</legend>
+        <ul>
+          <%= input_text('name', 'Name') %>
+          <%= input_text('site_uri', 'URL site', '', 50) %>
+          <%= input_text('feed_uri', 'URL feed', '', 50) %>
+
+          <li>
+            <label for="category">Category</label>
+            <select name="category_select">
+              <%= input_select_content(@categories.inject({'' => ''}) do |hash, v|
+                hash[v] = v
+                hash
+              end) %>
+            </select>
+            &nbsp; or &nbsp;
+            <input id="category_text" name="category_text" type="text" value="" size="10"/>
+          <li>
+            <%= input_checkbox('display_content', 'Display Content', true) %>
+        </ul>
+        <input name="commit" type="submit" value="Add"/>
+      </fieldset>
+    </form>
+
+    <% any_feed = !@feeds.empty? %>
+
+    <% if any_feed %>
+      <form action="/admin/edit_feed" method="post" class="adminFormLeft">
+        <fieldset>
+          <legend>Edit a feed</legend>
+          <ul>
+            <%= display_feeds_select(@feeds, 'edit_feed_select') %>
+            <%= input_text('name', 'Name') %>
+            <%= input_text('category', 'Category') %>
+            <%= input_checkbox('display_content', 'Display Content', true) %>
+          </ul>
+          <input name="commit" type="submit" value="Update"/>
+        </fieldset>
+      </form>
+
+      <form action="/admin/remove" method="post" class="adminFormLeft" onsubmit="return confirm('Are you sure you want to delete this feed ?');">
+        <fieldset>
+          <legend>Remove a feed</legend>
+          <ul>
+            <%= display_feeds_select(@feeds) %>
+          </ul>
+          <input name="commit" type="submit" value="Remove"/>
+        </fieldset>
+      </form>
+
+      <form action="/admin/rename_category" method="post" class="adminFormLeft" onsubmit="return confirm('Are you sure you want to rename this category ?');">
+        <fieldset>
+          <legend>Rename a category</legend>
+          <ul>
+
+            <li>
+              <label for="category_before">From</label>
+              <select name="category_before">
+                <%= input_select_content(@categories.inject({}) do |hash, v|
+                  hash[v] = v
+                  hash
+                end) %>
+              </select>
+            </li>
+            <li><%= input_text('category_after', 'To') %></li>
+          </ul>
+          <input name="commit" type="submit" value="Rename"/>
+        </fieldset>
+      </form>
+
+    <% end %>
+
+  </div>
+  <div id="adminRight">
+    <form>
+      <fieldset>
+        <legend>Feeds</legend>
+        <table>
+          <thead>
+          <tr>
+            <th>Category</th>
+            <th>Name</th>
+            <th>Display content</th>
+            <th>Last update</th>
+            <th>Site URI</th>
+            <th>Feed URI</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @feeds.each do |feed| %>
+            <tr>
+              <td><%= feed.category %></td>
+              <td><%= feed.name %></td>
+              <td><%= feed.display_content ? 'yes' : 'no' %></td>
+              <td><%= display_date_time(feed.last_notification) %></td>
+              <td><%= "<a href=\"#{feed.site_uri}\">#{feed.site_uri}</a>" %></td>
+              <td><%= "<a href=\"#{feed.feed_uri}\">#{feed.feed_uri}</a>" %></td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </fieldset>
+    </form>
+  </div>
+</div>
+  
