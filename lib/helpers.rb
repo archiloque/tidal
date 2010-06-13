@@ -25,9 +25,9 @@ module Sinatra
     end
 
 
-    def input_text(name, label, value = '', size = nil, id = nil)
+    def input_text(name, label, value = '', size = nil, id = nil, type = 'text')
       "<li><label for=\"#{name}\">#{label}</label>" +
-              "<input#{id ? " id=\"#{id}\"" : '' } name=\"#{name}\" type=\"text\" value=\"#{value}\"#{size ? " size=\"#{size}\"" : ''}/><li>"
+              "<input#{id ? " id=\"#{id}\"" : '' } name=\"#{name}\" type=\"#{type}\" value=\"#{value}\"#{size ? " size=\"#{size}\"" : ''}/><li>"
     end
 
     def input_file(name, label)

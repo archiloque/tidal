@@ -25,8 +25,8 @@ end.to_json};" %>;
               <legend>Add a feed</legend>
               <ul>
                 <%= input_text('name', 'Name') %>
-                <%= input_text('site_uri', 'URL site', '', 40) %>
-                <%= input_text('feed_uri', 'URL feed', '', 40) %>
+                <%= input_text('site_uri', 'URL site', '', 40, nil, 'url') %>
+                <%= input_text('feed_uri', 'URL feed', '', 40, nil, 'url') %>
 
                 <li>
                   <label for="category">Category</label>
