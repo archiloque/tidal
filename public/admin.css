@@ -25,9 +25,11 @@ fieldset ul {
   left: 10px;
 }
 
+#adminContent td {
+  vertical-align: top;
+}
+
 #adminLeft {
-  display: inline-block;
-  width: 470px;
   padding-right: 20px
 }
 
@@ -36,9 +38,6 @@ fieldset ul {
   width: 90px;
 }
 
-#adminRight {
-  float: right;
-}
 #adminRight table {
   border-collapse: collapse;
 }

@@ -4,7 +4,7 @@ class Tidal
     if check_logged
       @title = 'Configuration'
       @categories = database['select distinct(category) c from feeds order by category'].map(:c)
-      @feeds = Feed.order(:catgeroy.asc).order(:name.asc)
+      @feeds = Feed.order(:category.asc, :name.asc)
       @css_include << 'admin'
       erb :'admin.html'
     end
