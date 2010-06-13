@@ -2,6 +2,7 @@ require 'rubygems'
 require 'bundler'
 Bundler.setup
 
+require 'json'
 require 'logger'
 require 'tzinfo'
 require 'rest_client'
@@ -65,7 +66,7 @@ class Tidal < Sinatra::Base
 
   before do
     @user_logged = session[:user]
-    @javascript_include = ['jquery', 'tidal']
+    @js_include = ['jquery', 'tidal']
     @css_include = ['tidal']
   end
 

@@ -1,16 +1,32 @@
+<script type="text/javascript">
+  <%= "var feeds = #{@feeds.inject({}) do |hash, feed|
+  hash[feed.id] = {:name => feed.name, :category => feed.category, :display_content => feed.display_content, :public =>feed.public}
+  hash
+end.to_json};" %>;
+</script>
+
 <div id="adminContent">
   <div id="pageTitle">Configuration</div>
   <table id="adminMainTable">
     <tr>
       <td>
         <div id="adminLeft">
+          <form>
+            <fieldset>
+              <legend>Legend</legend>
+              <ul>
+                <li>* : private feed</li>
+                <li># : partial display</li>
+              </ul>
+            </fieldset>
+          </form>
           <form action="/admin/add" method="post">
             <fieldset>
               <legend>Add a feed</legend>
               <ul>
                 <%= input_text('name', 'Name') %>
-                <%= input_text('site_uri', 'URL site', '', 50) %>
-                <%= input_text('feed_uri', 'URL feed', '', 50) %>
+                <%= input_text('site_uri', 'URL site', '', 40) %>
+                <%= input_text('feed_uri', 'URL feed', '', 40) %>
 
                 <li>
                   <label for="category">Category</label>
@@ -38,10 +54,10 @@
                 <legend>Edit a feed</legend>
                 <ul>
                   <%= display_feeds_select(@feeds, 'edit_feed_select') %>
-                  <%= input_text('name', 'Name') %>
-                  <%= input_text('category', 'Category') %>
-                  <%= input_checkbox('display_content', 'Display Content', true) %>
-                  <%= input_checkbox('public', 'Public', true) %>
+                  <%= input_text('name', 'Name', '', 30, 'edit_feed_name') %>
+                  <%= input_text('category', 'Category', '', 30, 'edit_feed_category') %>
+                  <%= input_checkbox('display_content', 'Display Content', true, 'edit_feed_display_content') %>
+                  <%= input_checkbox('public', 'Public', true, 'edit_feed_public') %>
                 </ul>
                 <input name="update" type="submit" value="Update"/>
               </fieldset>

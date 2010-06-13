@@ -8,6 +8,7 @@ gem 'rack-flash', '0.1.1'
 gem 'tzinfo', '0.3.22'
 gem 'rest-client', '1.5.1'
 gem 'nokogiri', '1.4.2'
+gem 'json_pure' , '1.4.3'
 
 group :development do
   gem 'sqlite3-ruby', '1.3.0'

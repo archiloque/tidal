@@ -6,6 +6,7 @@ class Tidal
       @categories = database['select distinct(category) c from feeds order by category'].map(:c)
       @feeds = Feed.order(:category.asc, :name.asc)
       @css_include << 'admin'
+      @js_include << 'admin'
       erb :'admin.html'
     end
   end
@@ -18,8 +19,8 @@ class Tidal
                            :category => category,
                            :site_uri => params[:site_uri],
                            :feed_uri => params[:feed_uri],
-                           :display_content => params[:display_content],
-                           :public => params[:public])
+                           :display_content => params[:display_content] || false,
+                           :public => params[:public] || false)
         result = superfeedr_request(params[:feed_uri], feed.id, 'subscribe')
         if result.code == 202
           flash[:notice] = 'Feed added'
@@ -59,8 +60,8 @@ class Tidal
         begin
           feed.update(:name => params[:name],
                       :category => params[:category],
-                      :display_content => params[:display_content],
-                      :public => params[:public])
+                      :display_content => params[:display_content] || false,
+                      :public => params[:public] || false)
           flash[:notice] = 'Feed updated'
         rescue Sequel::ValidationFailed => e
           flash[:error] = "Error during feed update #{e}"

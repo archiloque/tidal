@@ -25,19 +25,19 @@ module Sinatra
     end
 
 
-    def input_text(name, label, value = '', size = nil)
+    def input_text(name, label, value = '', size = nil, id = nil)
       "<li><label for=\"#{name}\">#{label}</label>" +
-              "<input id=\"#{name}\" name=\"#{name}\" type=\"text\" value=\"#{value}\"#{size ? " size=\"#{size}\"" : ''}/><li>"
+              "<input#{id ? " id=\"#{id}\"" : '' } name=\"#{name}\" type=\"text\" value=\"#{value}\"#{size ? " size=\"#{size}\"" : ''}/><li>"
     end
 
     def input_file(name, label)
       "<li><label for=\"#{name}\">#{label}</label>" +
-              "<input id=\"#{name}\" name=\"#{name}\" type=\"file\"/><li>"
+              "<input name=\"#{name}\" type=\"file\"/><li>"
     end
 
-    def input_checkbox(name, label, value = false)
+    def input_checkbox(name, label, value = false, id = nil)
       "<li><label for=\"#{name}\">#{label}</label>" +
-              "<input name=\"#{name}\" type=\"checkbox\"#{value ? ' checked="checked"' : ''}\"/></li>"
+              "<input#{id ? " id=\"#{id}\"" : '' } name=\"#{name}\" type=\"checkbox\"#{value ? ' checked="checked"' : ''}\"/></li>"
     end
 
     def input_combobox(name, label, possible_values, selected_value = nil)
@@ -60,7 +60,7 @@ module Sinatra
           r << "<optgroup label=\"#{feed.category}\">"
           current_category = feed.category
         end
-        r << "<option value=\"#{feed.id}\">&nbsp;#{feed.name}</option>"
+        r << "<option value=\"#{feed.id}\">&nbsp;#{feed.name}#{feed.public ? '' : ' *'}#{feed.display_content ? '' : ' #'}</option>"
       end
       if current_category
         r << '</optgroup>'
