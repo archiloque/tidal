@@ -1,0 +1,36 @@
+<div id="sidebar">
+  <h4>Feeds</h4>
+
+  <ul>
+    <% @feeds_per_category.keys.sort.each do |category| %>
+      <% feeds = @feeds_per_category[category] %>
+      <li><h5><%= category %></h5>
+        <ul>
+          <% feeds.each do |feed| %>
+            <%= "<li><a href=\"#{feed.site_uri}\">#{feed.name}</a></li>" %>
+          <% end %>
+        </ul>
+      </li>
+    <% end %>
+  </ul>
+
+  <h4><a href="http://github.com/tidal">About</a></h4>
+</div>
+
+<div id="content">
+  &nbsp;
+  <h1 id="title">〰 Tidal, Archiloque's feed reader</h1>
+
+  <% for post in @posts %>
+    <% feed = @feeds_per_id[post.feed_id] %>
+    <% parsed_post = Nokogiri::XML(post.content) %>
+    <% link = parsed_post.xpath('/entry/link[@type=\'text/html\']')[0] %>
+    <% title = parsed_post.xpath('/entry/title')[0].content %>
+    <%= "<div class=\"postHeader\">〰 " +
+            "<span class=\"feedName\"><a href=\"#{feed.site_uri}\">#{feed.name}</a></span> – " +
+            "<span class=\"postTitle\">#{link ? "<a href=\"#{link['href']}\">#{title}</a>" : title}</span>" +
+            "<span class=\"postDate\"> #{post.published_at.strftime("%d/%m %H:%M")}</span>" +
+            "</div>" %>
+    <%= "<div class=\"postContent\">#{parsed_post.xpath('/entry/summary')[0].andand.content || parsed_post.xpath('/entry/content')[0].andand.content }</div>" %>
+  <% end %>
+</div>

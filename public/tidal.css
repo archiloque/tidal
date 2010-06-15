@@ -1,5 +1,5 @@
 body {
-  background-color: #EEEEEE;
+  background-color: #F5F5F5;
   font-family: Helvetica, "Helvetica Neue", "Lucida Grande", Verdana, sans-serif;
   font-size: 12px;
   color: #111111;
@@ -17,10 +17,14 @@ img {
 a {
   text-decoration: none;
   color: black;
-  font-weight: bold;
-  background-color: #E0E0E0;
+  background-color: #D0D0D0;
   padding-right: 2px;
   padding-left: 2px;
+  padding-top: 2px;
+}
+
+a img {
+  background-color: #F5F5F5;
 }
 
 a:hover {

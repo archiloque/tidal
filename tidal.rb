@@ -7,6 +7,7 @@ require 'logger'
 require 'tzinfo'
 require 'rest_client'
 require 'nokogiri'
+require 'andand'
 
 require 'sinatra/base'
 require 'rack-flash'
@@ -71,6 +72,17 @@ class Tidal < Sinatra::Base
   end
 
   get '/' do
+    feeds = Feed.filter(:public => true).order(:category.asc, :name.asc)
+
+    @feeds_per_category = Hash.new { |hash, key| hash[key] = [] }
+    @feeds_per_id = {}
+    feeds.each do |feed|
+      @feeds_per_category[feed.category] << feed
+      @feeds_per_id[feed.id] = feed
+    end
+    @posts = Post.filter('feed_id in (select id from feeds where public is ?)', true).order(:published_at.desc).limit(50)
+    @css_include << 'index'
+    erb :'index.html'
   end
 
 end
