@@ -1,3 +1,4 @@
+# The action called by superfeeder
 class Tidal
 
   # subscription confirmation

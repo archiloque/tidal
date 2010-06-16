@@ -1,3 +1,4 @@
+# The action for the administration pages
 class Tidal
 
   get '/admin' do
@@ -6,7 +7,8 @@ class Tidal
       @categories = database['select distinct(category) c from feeds order by category'].map(:c)
       @feeds = Feed.order(:category.asc, :name.asc)
       @css_include << 'admin'
-      @js_include << 'admin'
+      @js_include += ['admin', 'jquery', 'tidal']
+
       erb :'admin.html'
     end
   end

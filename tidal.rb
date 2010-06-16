@@ -67,7 +67,7 @@ class Tidal < Sinatra::Base
 
   before do
     @user_logged = session[:user]
-    @js_include = ['jquery', 'tidal']
+    @js_include = []
     @css_include = ['tidal']
   end
 
