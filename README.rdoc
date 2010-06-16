@@ -1,12 +1,36 @@
 = What ?
 
-I've been fed up with bloglines bugs and don't like google read so I decided to roll my own feed readers.
+I've been fed up with bloglines bugs and don't like google reader so I decided to write my own feed readers.
 
 = How ?
 
 {Superfeedr}[http://superfeedr.com] does the heavy job of checking all the sites for new items and send notifications back in atom format, all with a nice http API.
 
 Then I just have to store the data and display them, this is done in ruby using Sinatar and Sequel.
+
+Design copiously inspired from Sam Ruby's excellent {Planet Intertwingly}[http://planet.intertwingly.net/].
+
+= Installation
+
+Requirements: ruby and git
+
+1 create an account on {Superfeedr}[http://superfeedr.com]
+1 checkout the code
+1 install the bundler gem if you don't have it ('gem install bundler')
+1 in the application directory run 'bundle install'
+1 add these variables to your environment or add them to the config.ru file using the ENV['VARIABLE_NAME'] = 'XXX' syntax
+* SUPERFEEDER_LOGIN your Superfeedr login
+* SUPERFEEDER_PASSWORD your Superfeedr password
+* SERVER_BASE_URL your server base url with no trailing / so Superfeedr can call you back
+* OPENID_URI your OpenId identifier if you want to use authentification for the reader functionality
+1 in the app directory run 'rackup'
+1 go to http://localhost:9292
+
+= Pages
+
+* '/' a planet-like page presenting the lastest pages of your public feeds
+* '/admin' the administration page to add/edit/delete your feeds your feeds
+* '/reader' the reader page
 
 = LICENSE:
 

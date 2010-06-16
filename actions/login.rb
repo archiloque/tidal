@@ -1,27 +1,20 @@
+# session managment
 class Tidal
 
   get '/login' do
-    @title = 'Login'
-    erb :'login.html'
-  end
-
-  post '/login' do
     if resp = request.env['rack.openid.response']
       if resp.status == :success
         session[:user] = resp
         flash[:notice] = 'Connecté'
-        redirect '/'
+        redirect '/reader'
       else
         halt 404, "Error: #{resp.status}"
       end
+    elsif ENV['OPENID_URI']
+      headers 'WWW-Authenticate' => Rack::OpenID.build_header(:identifier => ENV['OPENID_URI'])
+      halt 401, 'got openid?'
     else
-      openid = params[:openid_identifier]
-      if User.where(:openid_identifier => openid).count == 0
-        halt 403, 'Openid identifier unknown'
-      else
-        headers 'WWW-Authenticate' => Rack::OpenID.build_header(:identifier => params[:openid_identifier])
-        halt 401, 'got openid?'
-      end
+      redirect '/reader'
     end
   end
 
@@ -32,9 +25,9 @@ class Tidal
   end
 
   private
-  
+
   def check_logged
-    if ENV['ALWAYS_LOGGED'] || @user_logged
+    if (!ENV['OPENID_URI']) || @user_logged
       true
     else
       redirect '/login'
@@ -43,7 +36,7 @@ class Tidal
   end
 
   def check_logged_ajax
-    if ENV['ALWAYS_LOGGED'] || @user_logged
+    if (!ENV['OPENID_URI']) || @user_logged
       true
     else
       body 'Logged users only'

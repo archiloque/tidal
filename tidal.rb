@@ -18,6 +18,10 @@ ENV['DATABASE_URL'] ||= "sqlite://#{Dir.pwd}/tidal.sqlite3"
     raise "#{param} env parameter is missing"
   end
 end
+if ENV['SERVER_BASE_URL'][-1, 1] == '/'
+  raise "SERVER_BASE_URL env parameter should not end with a '/'"
+end
+
 
 require 'sinatra'
 require 'sinatra/sequel'
@@ -87,4 +91,5 @@ end
 
 require 'actions/admin'
 require 'actions/login'
+require 'actions/reader'
 require 'actions/notifications'

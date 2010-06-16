@@ -1,18 +1,5 @@
 Sequel::Model.plugin :validation_helpers
 
-migration 'create table users' do
-  database.create_table :users do
-    primary_key :openid_identifier, :type => String, :null => false, :auto_increment => false
-  end
-end
-
-migration 'create table meta' do
-  database.create_table :metas do
-    primary_key :name, :type => String, :null => false, :auto_increment => false
-    Text :value, :null => true
-  end
-end
-
 migration 'create table feeds' do
   database.create_table :feeds do
     primary_key :id, :type=>Integer, :null => false
@@ -33,23 +20,6 @@ migration 'create table posts' do
     Text :content, :text => true
     foreign_key :feed_id, :feeds
     boolean :read, :null => true, :default => false
-  end
-end
-
-class User < Sequel::Model
-  def validate
-    begin
-      URI.parse openid_identifier
-    rescue URI::InvalidURIError
-      errors.add('', '[#{openid_identifier} is not a valid address')
-    end
-  end
-end
-
-class Meta < Sequel::Model
-  def validate
-    validates_unique :name
-    validates_presence :name
   end
 end
 
