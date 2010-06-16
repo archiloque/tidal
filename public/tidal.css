@@ -53,3 +53,146 @@ a:hover {
   border: 2px solid red;
   padding: 2px;
 }
+
+.postHeader {
+  padding-left: 20px;
+  font-size: 18px;
+  padding-bottom: 10px
+}
+.postHeader a {
+  background-color: #F5F5F5;
+}
+.postHeader a:hover {
+  background-color: #D0D0D0;
+  text-decoration: none;
+}
+.postDate {
+  font-size: 12px;
+}
+
+.postContent {
+  margin-bottom: 50px;
+  padding-right: 20px;
+
+  margin-left: 20px;
+  padding-left: 10px;
+  border-left: #ccccdd solid 1px;
+  line-height: 16px;
+}
+.postContent li {
+  margin-left: 5px;
+  margin-bottom: 5px;
+  list-style-type: square;
+  list-style-position: inside;
+}
+.postContent p {
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+
+/* index page */
+
+#indexTitle {
+  padding-left: 30px;
+  padding-top: 10px;
+  font-size: 36px;
+  padding-bottom: 50px;
+}
+
+#indexSidebar {
+  float: right;
+  width: 200px;
+
+  font-size: 10px;
+
+  padding-left: 20px;
+  padding-right: 10px;
+  padding-bottom: 5px;
+  margin-top: 40px;
+  margin-right: 20px;
+  margin-left: 20px;
+  margin-bottom: 10px;
+
+  border-left: #ccccdd solid 2px;
+  border-bottom: #ccccdd solid 2px;
+
+  border-radius: 10px;
+  border-radius-bottomleft: 10px;
+  -moz-border-radius-bottomleft: 10px;
+  -webkit-border-radius-bottomleft: 10px;
+}
+#indexSidebar a {
+  font-weight: normal;
+  background-color: #F5F5F5;
+}
+#indexSidebar h4 {
+  padding-top: 10px;
+  font-size: 12px;
+  font-weight: normal;
+}
+#indexSidebar h5 {
+  font-weight: normal;
+  font-size: 12px;
+  padding-top: 2px;
+  padding-bottom: 1px;
+}
+#indexSidebar li {
+  padding-left: 10px;
+  list-style: none;
+  padding-bottom: 1px;
+}
+
+/* admin page */
+
+#adminPageTitle {
+  padding-bottom: 10px;
+  padding-left: 20px;
+  font-size: 32px;
+}
+
+fieldset {
+  padding: 5px;
+  border: 1px solid #b0b0b0;
+  margin-bottom: 10px;
+}
+
+fieldset li {
+  list-style: none;
+  padding-bottom: 4px;
+}
+
+fieldset ul {
+  padding-bottom: 5px;
+}
+
+#adminContent {
+  position: absolute;
+  top: 25px;
+  left: 10px;
+}
+
+#adminContent td {
+  vertical-align: top;
+}
+
+#adminLeft {
+  padding-right: 20px;
+  width: 400px;
+}
+
+#adminLeft li label {
+  display: inline-block;
+  width: 90px;
+}
+
+#adminRight table {
+  border-collapse: collapse;
+}
+#adminRight table td, #adminRight table th {
+  text-align: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border: 1px solid #b0b0b0;
+}

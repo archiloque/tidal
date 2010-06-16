@@ -68,7 +68,6 @@ class Tidal < Sinatra::Base
   before do
     @user_logged = session[:user]
     @js_include = []
-    @css_include = ['tidal']
   end
 
   get '/' do
@@ -81,7 +80,6 @@ class Tidal < Sinatra::Base
       @feeds_per_id[feed.id] = feed
     end
     @posts = Post.filter('feed_id in (select id from feeds where public is ?)', true).order(:published_at.desc).limit(100)
-    @css_include << 'index'
     erb :'index.html'
   end
 
