@@ -84,4 +84,5 @@ p {
 #sidebar li {
   padding-left: 10px;
   list-style: none;
+  padding-bottom: 1px;
 }
