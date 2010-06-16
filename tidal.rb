@@ -80,7 +80,7 @@ class Tidal < Sinatra::Base
       @feeds_per_category[feed.category] << feed
       @feeds_per_id[feed.id] = feed
     end
-    @posts = Post.filter('feed_id in (select id from feeds where public is ?)', true).order(:published_at.desc).limit(50)
+    @posts = Post.filter('feed_id in (select id from feeds where public is ?)', true).order(:published_at.desc).limit(100)
     @css_include << 'index'
     erb :'index.html'
   end
