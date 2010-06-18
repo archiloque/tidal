@@ -23,6 +23,7 @@ Requirements: ruby and git
 * SUPERFEEDER_PASSWORD your Superfeedr password
 * SERVER_BASE_URL your server base url with no trailing / so Superfeedr can call you back
 * OPENID_URI your OpenId identifier if you want to use authentification for the reader functionality
+* DATABASE_URL database url path, see {here}[http://sequel.rubyforge.org/rdoc/files/doc/opening_databases_rdoc.html] for details
 1 in the app directory run 'rackup'
 1 go to http://localhost:9292
 
