@@ -34,7 +34,7 @@ class Tidal
     end
   end
 
-  post '/admin/delete' do
+  post '/admin/remove' do
     if check_logged
       feed = Feed.where(:id => params[:feed]).first
       if feed
