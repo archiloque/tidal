@@ -9,7 +9,7 @@ migration 'create table feeds' do
     String :feed_uri, :size => 250, :null => false
     boolean :display_content, :null => false
     DateTime :last_notification, :null => true
-    boolean :public, :null => false
+    boolean :public, :null => false, :index => true, :unique => false
   end
 end
 
@@ -19,7 +19,7 @@ migration 'create table posts' do
     DateTime :published_at, :null => false, :index => true, :unique => false
     Text :content, :text => true
     foreign_key :feed_id, :feeds
-    boolean :read, :null => true, :default => false
+    boolean :read, :null => true, :default => false, :index => true, :unique => false
   end
 end
 
