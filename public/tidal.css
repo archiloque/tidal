@@ -287,13 +287,34 @@ fieldset ul {
   padding-bottom: 10px;
   padding-left: 20px;
 }
+
 .feedTitle a {
   padding: 0;
   background-color: #F5F5F5;
 }
+
 .feedContent {
   padding-bottom: 30px;
 }
+
 .hiddenPost {
   display: none;
+}
+
+#readOk {
+  font-size: 24px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-left: 20px;
+
+  border: #ccccdd solid 2px;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  width: 200px;
+  text-align: center;
+}
+
+#readOk a {
+  background-color: #F5F5F5;
 }

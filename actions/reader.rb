@@ -43,6 +43,13 @@ class Tidal
             'from posts, feeds where feeds.id = posts.feed_id and posts.read = ? and feeds.id = ? order by feeds.category, feeds.name', false, params[:id]]
   end
 
+  get '/reader/postsRead' do
+    if params[:displayedIds]
+      Post.filter(:id => params[:displayedIds]).update(:read => true)
+    end
+    halt "OK"
+  end
+
   private
 
   def render_posts query

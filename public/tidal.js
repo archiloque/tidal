@@ -97,9 +97,18 @@ function display(url, params) {
                     });
                     result += '\n\t</div>';
                 });
+                result += '<div id="readOk"><a href="#" onclick="postsRead(); return false;">I\'ve read it all!</a></div>';
                 content.html(result);
                 content.slideDown();
             });
+        });
+    });
+}
+
+function postsRead() {
+    $.get("/reader/postsRead", {displayedIds: displayedIds}, function(data) {
+        content.animate({scrollTop:0}, 400, function() {
+            content.slideUp();
         });
     });
 }
