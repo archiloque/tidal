@@ -59,13 +59,16 @@ a:hover {
   font-size: 18px;
   padding-bottom: 10px
 }
+
 .postHeader a {
   background-color: #F5F5F5;
 }
+
 .postHeader a:hover {
   background-color: #D0D0D0;
   text-decoration: none;
 }
+
 .postDate {
   font-size: 12px;
 }
@@ -79,12 +82,14 @@ a:hover {
   border-left: #ccccdd solid 1px;
   line-height: 16px;
 }
+
 .postContent li {
   margin-left: 5px;
   margin-bottom: 5px;
   list-style-type: square;
   list-style-position: inside;
 }
+
 .postContent p {
   padding-bottom: 5px;
   padding-top: 5px;
@@ -121,21 +126,25 @@ a:hover {
   -moz-border-radius-bottomleft: 10px;
   -webkit-border-radius-bottomleft: 10px;
 }
+
 #indexSidebar a {
   font-weight: normal;
   background-color: #F5F5F5;
 }
+
 #indexSidebar h4 {
   padding-top: 10px;
   font-size: 12px;
   font-weight: normal;
 }
+
 #indexSidebar h5 {
   font-weight: normal;
   font-size: 12px;
   padding-top: 2px;
   padding-bottom: 1px;
 }
+
 #indexSidebar li {
   padding-left: 10px;
   list-style: none;
@@ -188,6 +197,7 @@ fieldset ul {
 #adminRight table {
   border-collapse: collapse;
 }
+
 #adminRight table td, #adminRight table th {
   text-align: center;
   padding-left: 10px;
@@ -195,4 +205,66 @@ fieldset ul {
   padding-top: 5px;
   padding-bottom: 5px;
   border: 1px solid #b0b0b0;
+}
+
+/* reader */
+
+#readerSidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  padding-top: 10px;
+  padding-left: 10px;
+  overflow-y: auto;
+  width: 250px;
+  border-right: #ccccdd solid 2px;
+}
+
+#readerSidebar a {
+  padding: 0;
+  background-color: #F5F5F5;
+}
+
+#displayAll {
+  font-weight: bold;
+}
+
+#readerSidebar li {
+  list-style: none;
+}
+
+.categoryLi {
+  padding-bottom: 4px;
+}
+
+.category {
+  font-size: 12px;
+}
+
+.categoryWithElements {
+  font-weight: bold;
+}
+
+.categoryExpander {
+  margin-right: 4px;
+}
+
+.categoryLi li {
+  list-style: none;
+  padding-left: 15px;
+  padding-top: 1px;
+  padding-bottom: 2px;
+}
+
+.feedUL {
+  padding-top: 2px;
+  display: none;
+}
+
+.feedWithElements {
+  font-weight: bold;
+}
+
+#readerLogout {
+  padding-top: 5px;
 }

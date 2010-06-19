@@ -3,6 +3,7 @@ class Tidal
 
   get '/reader' do
     if check_logged
+      @js_include += ['jquery', 'tidal']
       erb :'reader.html'
     end
   end
@@ -10,13 +11,19 @@ class Tidal
   get '/reader/feeds_info' do
     feeds_per_category = []
     current_category = -1
-    database['select feeds.id id, feeds.category category, feeds.name name, feeds.display_content display_content count(posts.id) count from feeds ' +
+    current_count = 0;
+    database['select feeds.id id, feeds.category category, feeds.name name, feeds.display_content display_content, count(posts.id) count from feeds ' +
             'left join posts on feeds.id = posts.feed_id and posts.read = ? group by feeds.id order by feeds.category, feeds.name', false].each do |row|
       if row[:category] != current_category
-        feeds_per_category << [row[:category] || '']
+        if current_category != -1
+          feeds_per_category.last << current_count
+        end
+        current_count = 0
+        feeds_per_category << [row[:category] || '', []]
         current_category = row[:category]
       end
-      feeds_per_category.last << {:id => row[:id], :name => row[:name], :count => row[:count], :display_content => row[:display_content]}
+      current_count += row[:count]
+      feeds_per_category.last[1] << {:id => row[:id], :name => row[:name], :count => row[:count], :display_content => row[:display_content]}
     end
     halt 200, {'Content-Type' => 'application/json'}, feeds_per_category.to_json
   end
