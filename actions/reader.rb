@@ -12,7 +12,7 @@ class Tidal
     feeds_per_category = []
     current_category = -1
     current_count = 0;
-    database['select feeds.id id, feeds.category category, feeds.name name, feeds.display_content display_content, feeds.site_uri site_uri, count(posts.id) count from feeds ' +
+    database['select feeds.id as id, feeds.category as category, feeds.name as name, feeds.display_content as display_content, feeds.site_uri as site_uri, count(posts.id) as count from feeds ' +
             'left join posts on feeds.id = posts.feed_id and posts.read = ? group by feeds.id order by feeds.category, feeds.name', false].each do |row|
       if row[:category] != current_category
         if current_category != -1
@@ -29,17 +29,17 @@ class Tidal
   end
 
   get '/reader/render/all' do
-    render_posts ['select posts.id id, posts.published_at published_at, posts.content content, posts.feed_id feed_id ' +
+    render_posts ['select posts.id as id, posts.published_at as published_at, posts.content as content, posts.feed_id as feed_id ' +
             'from posts, feeds where feeds.id = posts.feed_id and posts.read = ? order by feeds.category, feeds.name', false]
   end
 
   get '/reader/render/category' do
-    render_posts ['select posts.id id, posts.published_at published_at, posts.content content, posts.feed_id feed_id ' +
+    render_posts ['select posts.id as id, posts.published_at as published_at, posts.content as content, posts.feed_id as feed_id ' +
             'from posts, feeds where feeds.id = posts.feed_id and posts.read = ? and feeds.category = ? order by feeds.category, feeds.name', false, params[:name]]
   end
 
   get '/reader/render/feed/:id' do
-    render_posts ['select posts.id id, posts.published_at published_at, posts.content content, posts.feed_id feed_id ' +
+    render_posts ['select posts.id as id, posts.published_at as published_at, posts.content as content, posts.feed_id as feed_id ' +
             'from posts, feeds where feeds.id = posts.feed_id and posts.read = ? and feeds.id = ? order by feeds.category, feeds.name', false, params[:id]]
   end
 
