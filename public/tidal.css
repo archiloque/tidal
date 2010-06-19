@@ -54,6 +54,7 @@ a:hover {
   padding: 2px;
 }
 
+/* posts */
 .postHeader {
   padding-left: 20px;
   font-size: 18px;
@@ -65,8 +66,7 @@ a:hover {
 }
 
 .postHeader a:hover {
-  background-color: #D0D0D0;
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 .postDate {
@@ -215,6 +215,7 @@ fieldset ul {
   bottom: 0;
   padding-top: 10px;
   padding-left: 10px;
+  padding-bottom: 5px;
   overflow-y: auto;
   width: 250px;
   border-right: #ccccdd solid 2px;
@@ -237,7 +238,7 @@ fieldset ul {
   padding-bottom: 4px;
 }
 
-.category {
+.categoryInfo {
   font-size: 12px;
 }
 
@@ -267,4 +268,27 @@ fieldset ul {
 
 #readerLogout {
   padding-top: 5px;
+}
+
+#readerContent {
+  position: absolute;
+  left: 270px;
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+
+.feedTitle {
+  font-size: 24px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+}
+.feedTitle a {
+  padding: 0;
+  background-color: #F5F5F5;
+}
+.feedContent {
+  padding-bottom: 30px;
+}
+.hiddenPost {
+  display: none;
 }
