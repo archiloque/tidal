@@ -13,7 +13,7 @@ require 'sinatra/base'
 require 'rack-flash'
 
 ENV['DATABASE_URL'] ||= "sqlite://#{Dir.pwd}/tidal.sqlite3"
-['SUPERFEEDER_LOGIN', 'SUPERFEEDER_PASSWORD', 'SERVER_BASE_URL'].each do |param|
+['SUPERFEEDER_LOGIN', 'SUPERFEEDER_PASSWORD', 'SERVER_BASE_URL', 'TIMEZONE'].each do |param|
   unless ENV[param]
     raise "#{param} env parameter is missing"
   end
@@ -27,7 +27,7 @@ require 'sinatra'
 require 'sinatra/sequel'
 
 require 'sequel/extensions/named_timezones'
-Sequel.default_timezone = TZInfo::Timezone.get('Europe/Paris')
+Sequel.default_timezone = TZInfo::Timezone.get(ENV['TIMEZONE'])
 Sequel::Model.raise_on_save_failure = true
 require 'erb'
 
