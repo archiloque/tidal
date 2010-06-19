@@ -77,39 +77,35 @@ function display(url, params) {
     params.displayedIds = displayedIds;
     $.getJSON(url, params, function(data) {
         var content = $("#readerContent");
-        content.animate({scrollTop:0}, 400, function() {
-            content.slideUp(function() {
-                var result = '';
-                displayedIds = [];
-                $.each(data, function(id, feedItem) {
-                    var feed = getFeed(feedItem.id);
-                    var feedName = feed ? feed.name : '';
-                    result += '\n<div class="feedContent">'
-                            + '\n\t<div class="feedTitle"><a href="' + feed.site_uri + '">' + feedName + '</a></div>';
-                    $.each(feedItem.posts, function(id, post) {
-                        displayedIds.push(post.id);
-                        result += '\n\t\t<div class="postHeader">'
-                                + '<a id="postExpander_' + post.id + '" href="#" onclick="clickPostExpander(' + post.id + '); return false;">' + (feed.display_content ? '-' : '+' ) + '</a> '
-                                + '<a href="' + post.link + '" target="_blank">' + post.title + '</a>'
-                                + '<span class="postDate">' + post.published_at + '</span>'
-                                + '</div>'
-                                + '\n\t\t<div id="post_' + post.id + '" class="postContent' + (feed.display_content ? '' : ' hiddenPost' ) + '">' + post.content + '</div>'
-                    });
-                    result += '\n\t</div>';
+        content.slideUp(function() {
+            var result = '';
+            displayedIds = [];
+            $.each(data, function(id, feedItem) {
+                var feed = getFeed(feedItem.id);
+                var feedName = feed ? feed.name : '';
+                result += '\n<div class="feedContent">'
+                        + '\n\t<div class="feedTitle"><a href="' + feed.site_uri + '">' + feedName + '</a></div>';
+                $.each(feedItem.posts, function(id, post) {
+                    displayedIds.push(post.id);
+                    result += '\n\t\t<div class="postHeader">'
+                            + '<a id="postExpander_' + post.id + '" href="#" onclick="clickPostExpander(' + post.id + '); return false;">' + (feed.display_content ? '-' : '+' ) + '</a> '
+                            + '<a href="' + post.link + '" target="_blank">' + post.title + '</a>'
+                            + '<span class="postDate">' + post.published_at + '</span>'
+                            + '</div>'
+                            + '\n\t\t<div id="post_' + post.id + '" class="postContent' + (feed.display_content ? '' : ' hiddenPost' ) + '">' + post.content + '</div>'
                 });
-                result += '<div id="readOk"><a href="#" onclick="postsRead(); return false;">I\'ve read it all!</a></div>';
-                content.html(result);
-                content.slideDown();
+                result += '\n\t</div>';
             });
+            result += '<div id="readOk"><a href="#" onclick="postsRead(); return false;">I\'ve read it all!</a></div>';
+            content.html(result);
+            content.slideDown();
         });
     });
 }
 
 function postsRead() {
     $.get("/reader/postsRead", {displayedIds: displayedIds}, function(data) {
-        content.animate({scrollTop:0}, 400, function() {
-            content.slideUp();
-        });
+        content.slideUp();
     });
 }
 
