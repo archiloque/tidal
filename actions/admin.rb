@@ -6,7 +6,7 @@ class Tidal
       @title = 'Configuration'
       @categories = database['select distinct(category) c from feeds order by category'].map(:c)
       @feeds = Feed.order(:category.asc, :name.asc)
-      @js_include += ['admin', 'jquery', 'tidal']
+      @js_include += ['jquery', 'tidal']
       erb :'admin.html'
     end
   end
