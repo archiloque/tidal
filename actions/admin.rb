@@ -106,7 +106,10 @@ class Tidal
         end
       end
       added_feeds.each do |f|
-        superfeedr_request(f[0], f[1], 'subscribe')
+        result = superfeedr_request(f[0], f[1], 'subscribe')
+        unless [202, 204].include? result.code
+          flash[:error] = "Failure while adding feed #{added_feeds[0]}: return code #{result.code},  #{result}"
+        end
       end
 
       flash[:notice] = "#{feeds_number.to_s} feeds added and #{duplicates_number} duplicates"
