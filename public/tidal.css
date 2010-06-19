@@ -211,14 +211,19 @@ fieldset ul {
 
 #readerSidebar {
   position: fixed;
-  top: 0;
-  bottom: 0;
-  padding-top: 10px;
+  top: -10px;
+  padding-top: 20px;
   padding-left: 10px;
   padding-bottom: 5px;
   overflow-y: auto;
   width: 250px;
   border-right: #ccccdd solid 2px;
+  border-bottom: #ccccdd solid 2px;
+
+  border-radius: 10px;
+  border-radius-bottomright: 10px;
+  -moz-border-radius-bottomright: 10px;
+  -webkit-border-radius-bottomright: 10px;
 }
 
 #readerSidebar a {
