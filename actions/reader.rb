@@ -12,8 +12,11 @@ class Tidal
     feeds_per_category = []
     current_category = -1
     current_count = 0;
-    database['select feeds.id as id, feeds.category as category, feeds.name as name, feeds.display_content as display_content, feeds.site_uri as site_uri, count(posts.id) as count from feeds ' +
-            'left join posts on feeds.id = posts.feed_id and posts.read = ? group by feeds.id order by feeds.category, feeds.name', false].each do |row|
+    database['select feeds.id as id, feeds.category as category, feeds.name as name, feeds.display_content as display_content, feeds.site_uri as site_uri, count(posts.id) as count ' +
+            'from feeds ' +
+            'left join posts on feeds.id = posts.feed_id and posts.read = ? ' +
+            'group by feeds.id, feeds.category, feeds.name, feeds.display_content, feeds.site_uri ' +
+            'order by feeds.category, feeds.name', false].each do |row|
       if row[:category] != current_category
         if current_category != -1
           feeds_per_category.last[:count] = current_count
