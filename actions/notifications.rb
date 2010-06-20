@@ -3,14 +3,18 @@ class Tidal
 
   # subscription confirmation
   get '/callback/:id' do
-    halt 200, params['hub.challenge']
+    if Feed.where(:id => params[:id]).update(:subscription_validated => true) == 1
+      halt 200, params['hub.challenge']
+    else
+      halt 404
+    end
   end
 
   # receive the new items
   post '/callback/:id' do
     if Feed.where(:id => params[:id]).update(:last_notification => DateTime.now) == 1
       content = request.body.read
-      File.open("feed_#{params[:id]}.xml", 'w') {|f| f.write(content) }
+      File.open("feed_#{params[:id]}.xml", 'w') { |f| f.write(content) }
       Nokogiri::XML(content).css('entry').each do |entry|
         published_at = DateTime.now
         entry.css('published').each do |published|

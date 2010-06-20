@@ -50,7 +50,12 @@ class Tidal < Sinatra::Base
   set :public, File.dirname(__FILE__) + '/public'
   set :raise_errors, true
   set :show_exceptions, :true
-  set :logging, ENV['LOGGING']
+  if ENV['LOGGING']
+    set :logging, true
+    RestClient.log = "STDOUT"
+  else
+    set :logging, false
+  end
 
   root_dir = File.dirname(__FILE__)
   set :app_file, File.join(root_dir, 'tidal.rb')

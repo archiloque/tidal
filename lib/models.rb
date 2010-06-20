@@ -10,6 +10,7 @@ migration 'create table feeds' do
     boolean :display_content, :null => false
     DateTime :last_notification, :null => true
     boolean :public, :null => false, :index => true, :unique => false
+    boolean :subscription_validated, :null => false
   end
 end
 

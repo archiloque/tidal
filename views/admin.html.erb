@@ -122,6 +122,7 @@ end.to_json};" %>;
                   <th>Last update</th>
                   <th>Site URI</th>
                   <th>Feed URI</th>
+                  <th>Subscription Validated</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -134,6 +135,7 @@ end.to_json};" %>;
                     <td><%= display_date_time(feed.last_notification) %></td>
                     <td><%= "<a href=\"#{feed.site_uri}\">#{feed.site_uri}</a>" %></td>
                     <td><%= "<a href=\"#{feed.feed_uri}\">#{feed.feed_uri}</a>" %></td>
+                    <td><%= feed.subscription_validated ? 'yes' : 'no' %></td>
                   </tr>
                 <% end %>
                 </tbody>

@@ -20,7 +20,8 @@ class Tidal
                            :site_uri => params[:site_uri],
                            :feed_uri => params[:feed_uri],
                            :display_content => params[:display_content] || false,
-                           :public => params[:public] || false)
+                           :public => params[:public] || false,
+                           :subscription_validated => false)
         result = superfeedr_request(params[:feed_uri], feed.id, 'subscribe')
         if result.code == 202
           flash[:notice] = 'Feed added'
@@ -100,7 +101,8 @@ class Tidal
                              :site_uri => site_uri,
                              :feed_uri => outline['xmlUrl'],
                              :display_content => true,
-                             :public => true)
+                             :public => true,
+                             :subscription_validated => false)
           added_feeds << [outline['xmlUrl'], feed.id]
           feeds_number += 1
         end
