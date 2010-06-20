@@ -34,7 +34,9 @@ a:hover {
 #messages {
   position: absolute;
   top: 0;
+  left: 0;
   color: black;
+  background-color: #F5F5F5;
   font-weight: bold;
   font-size: 14px;
 }
