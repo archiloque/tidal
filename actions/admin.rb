@@ -119,6 +119,10 @@ class Tidal
     end
   end
 
+  post '/purge' do
+    Post.filter({:read => true} & (:published_at <= (DateTime.now - 7))).delete
+  end
+
   private
 
   def superfeedr_request feed_uri, feed_id, action
