@@ -112,6 +112,7 @@ class Tidal
         unless [202, 204].include? result.code
           flash[:error] = "Failure while adding feed #{added_feeds[0]}: return code #{result.code},  #{result}"
         end
+
       end
 
       flash[:notice] = "#{feeds_number.to_s} feeds added and #{duplicates_number} duplicates"
@@ -126,14 +127,18 @@ class Tidal
   private
 
   def superfeedr_request feed_uri, feed_id, action
-    RestClient::Request.execute(:method => :post,
-                                :url => 'https://superfeedr.com/hubbub',
-                                :payload => {'hub.mode'  => action,
-                                             'hub.verify' => 'async',
-                                             'hub.topic' => feed_uri,
-                                             'hub.callback' => "#{ENV['SERVER_BASE_URL']}/callback/#{feed_id}"},
-                                :user => ENV['SUPERFEEDER_LOGIN'],
-                                :password => ENV['SUPERFEEDER_PASSWORD'])
+    result = RestClient::Request.execute(:method => :post,
+                                         :url => 'https://superfeedr.com/hubbub',
+                                         :payload => {'hub.mode'  => action,
+                                                      'hub.verify' => 'async',
+                                                      'hub.topic' => feed_uri,
+                                                      'hub.callback' => "#{ENV['SERVER_BASE_URL']}/callback/#{feed_id}"},
+                                         :user => ENV['SUPERFEEDER_LOGIN'],
+                                         :password => ENV['SUPERFEEDER_PASSWORD'])
+    if ENV['LOGGING']
+      STDOUT.puts "superfeedr request #{result.code} #{result.headers}"
+    end
+    result
   end
 
 end
