@@ -130,7 +130,7 @@ class Tidal
   def superfeedr_request feed_uri, feed_id, action
     log "caling superfeedr for #{feed_id}"
     result = RestClient::Request.execute(:method => :post,
-                                         :url => 'https://superfeedr.com/hubbub',
+                                         :url => 'http://superfeedr.com/hubbub',
                                          :payload => {'hub.mode'  => action,
                                                       'hub.verify' => 'async',
                                                       'hub.topic' => feed_uri,
