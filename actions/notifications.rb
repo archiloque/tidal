@@ -5,6 +5,9 @@ class Tidal
   get '/callback/:id' do
     is_subscribing = (params['hub.mode'] == 'subscribe')
     if Feed.where(:id => params[:id]).update(:subscription_validated => is_subscribing) == 1
+      if ENV['LOGGING']
+        STDOUT.puts "Callback received, answering [#{params['hub.challenge']}]"
+      end
       halt 200, params['hub.challenge']
     else
       halt 404
