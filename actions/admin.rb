@@ -31,6 +31,7 @@ class Tidal
       rescue Sequel::ValidationFailed => e
         flash[:error] = "Error during feed creation #{e}"
       end
+      log "#{params[:name]} added"
       redirect '/admin'
     end
   end
@@ -114,8 +115,8 @@ class Tidal
         end
 
       end
-
       flash[:notice] = "#{feeds_number.to_s} feeds added and #{duplicates_number} duplicates"
+      log "opml file included"
       redirect '/admin'
     end
   end
@@ -135,9 +136,7 @@ class Tidal
                                                       'hub.callback' => "#{ENV['SERVER_BASE_URL']}/callback/#{feed_id}"},
                                          :user => ENV['SUPERFEEDER_LOGIN'],
                                          :password => ENV['SUPERFEEDER_PASSWORD'])
-    if ENV['LOGGING']
-      STDOUT.puts "superfeedr request #{result.code} #{result.headers}"
-    end
+    log "superfeedr result #{result.code}"
     result
   end
 

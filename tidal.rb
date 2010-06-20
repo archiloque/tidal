@@ -93,6 +93,14 @@ class Tidal < Sinatra::Base
     erb :'index.html'
   end
 
+  private
+
+  def log message
+    if ENV['LOGGING']
+      STDOUT.puts "#{Time.now} #{message}"
+    end
+  end
+
 end
 
 require 'actions/admin'
