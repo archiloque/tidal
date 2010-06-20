@@ -3,7 +3,8 @@ class Tidal
 
   # subscription confirmation
   get '/callback/:id' do
-    if Feed.where(:id => params[:id]).update(:subscription_validated => true) == 1
+    is_subscribing = (params['hub.mode'] == 'subscribe')
+    if Feed.where(:id => params[:id]).update(:subscription_validated => is_subscribing) == 1
       halt 200, params['hub.challenge']
     else
       halt 404
