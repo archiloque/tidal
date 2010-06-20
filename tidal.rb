@@ -52,7 +52,7 @@ class Tidal < Sinatra::Base
   set :show_exceptions, :true
   if ENV['LOGGING']
     set :logging, true
-    RestClient.log = "STDOUT"
+    RestClient.log = 'stdout'
   else
     set :logging, false
   end
