@@ -26,7 +26,12 @@ class Tidal
         feeds_per_category << {:name => (current_category || ''), :feeds => []}
       end
       current_count += row[:count]
-      feeds_per_category.last[:feeds] << {:id => row[:id], :name => row[:name], :count => row[:count], :display_content => row[:display_content], :site_uri => row[:site_uri]}
+      feeds_per_category.last[:feeds] << {:id => row[:id],
+                                          :name => row[:name],
+                                          :count => row[:count],
+                                          :display_content => row[:display_content],
+                                          :site_uri => row[:site_uri],
+                                          :category => row[:category] || ''}
     end
     halt 200, {'Content-Type' => 'application/json'}, feeds_per_category.to_json
   end
