@@ -21,9 +21,9 @@ $(function () {
                 var isCategoryEmpty = (!itemsCount) || (itemsCount == 0);
                 var categoryName = category.name;
 
-                result += '<li class="categoryLi" id="category_' + i + '">\n'
+                result += '<li class="categoryLi" id="categoryLi_' + i + '">\n'
                         + '\t<a id="categoryExpander_' + i + '" class="categoryExpander" onclick="clickCategoryExpander(' + i + '); return false" href="#">+</a>\n'
-                        + '\t<a href="#" class="categoryInfo' + (isCategoryEmpty ? '' : ' categoryWithElements' ) + '" onclick="displayCategory(\'' + categoryName + '\'); return false;">' + categoryName + '</a>';
+                        + '\t<a href="#" id="category_' + i + ' class="categoryInfo' + (isCategoryEmpty ? '' : ' categoryWithElements' ) + '" onclick="displayCategory(\'' + categoryName + '\'); return false;">' + categoryName + '</a>';
                 if (! isCategoryEmpty) {
                     result += ' (' + itemsCount + ')';
                 }
@@ -50,30 +50,71 @@ function clickCategoryExpander(i) {
     var categoryExpander = $("#categoryExpander_" + i);
     if (categoryExpander.html() == "+") {
         // will expand
-        $("#category_" + i + " > ul").slideDown(function() {
+        $("#categoryLi_" + i + " > ul").slideDown(function() {
             categoryExpander.html("–");
         });
     } else {
         // will collapse
-        $("#category_" + i + " > ul").slideUp(function() {
+        $("#categoryLi_" + i + " > ul").slideUp(function() {
             categoryExpander.html('+');
         });
     }
 }
 
 function displayAll() {
-    display("/reader/render/all", {});
+    display("/reader/render/all", {}, function() {
+        $.each(feeds_information, function(i, category) {
+            // update the categories
+            $("#category_" + i).removeClass("feedWithElements").html(name);
+
+            // update the feeds
+            $.each(category.feeds, function (i, feed) {
+                $("#feed_" + feed.id).removeClass("feedWithElements").html(feed.id.name);
+            });
+        });
+    });
 }
 
+// display unread posts from this category
 function displayCategory(name) {
-    display("/reader/render/category", {name: name});
+    display("/reader/render/category", {name: name}, function() {
+        // find the category
+        $.each(feeds_information, function(i, category) {
+            if (category.name == name) {
+
+                // update the category
+                $("#category_" + i).removeClass("feedWithElements").html(name);
+
+                // update the feeds
+                $.each(category.feeds, function (i, feed) {
+                    $("#feed_" + feed.id).removeClass("feedWithElements").html(feed.id.name);
+                });
+            }
+        });
+    });
 }
 
+// display unread posts from this feed
 function displayFeed(id) {
-    display("/reader/render/feed/" + id, {});
+    display("/reader/render/feed/" + id, {}, function() {
+        var feed = getFeed(id);
+        $("#feed_" + id).removeClass("feedWithElements").html(feed.name);
+        $.each(feeds_information, function(i, category) {
+            if (category.name == feed.category) {
+                // we found the category, now we look if one of the feed still contain unread feeds
+                var unreadFeed = false;
+                $.each(category.feeds, function (i, f) {
+                    unreadFeed = unreadFeed || $("#feed_" + f.id).hasClass("feedWithElements");
+                });
+                if (unreadFeed) {
+                    $("#category_" + i).removeClass("feedWithElements").html(category.name);
+                }
+            }
+        });
+    });
 }
 
-function display(url, params) {
+function display(url, params, callback) {
     params.displayedIds = displayedIds;
     $.getJSON(url, params, function(data) {
         var content = $("#readerContent");
@@ -99,6 +140,9 @@ function display(url, params) {
             result += '<div id="readOk"><a href="#" onclick="postsRead(); return false;">I\'ve read it all!</a></div>';
             content.html(result);
             content.slideDown();
+            if (callback != null) {
+                callback();
+            }
         });
     });
 }
