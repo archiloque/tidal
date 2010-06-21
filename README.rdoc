@@ -20,19 +20,19 @@ Design copiously inspired from Sam Ruby's excellent {Planet Intertwingly}[http:/
 
 Requirements: ruby and git
 
-1 create an account on {Superfeedr}[http://superfeedr.com]
-1 checkout the code
-1 install the bundler gem if you don't have it ('gem install bundler')
-1 in the application directory run 'bundle install'
-1 add these variables to your environment or add them to the config.ru file using the ENV['VARIABLE_NAME'] = 'XXX' syntax
+1. create an account on {Superfeedr}[http://superfeedr.com]
+1. checkout the code
+1. install the bundler gem if you don't have it ('gem install bundler')
+1. in the application directory run 'bundle install'
+1. add these variables to your environment or add them to the config.ru file using the ENV['VARIABLE_NAME'] = 'XXX' syntax
 * SUPERFEEDER_LOGIN your Superfeedr login
 * SUPERFEEDER_PASSWORD your Superfeedr password
 * SERVER_BASE_URL your server base url with no trailing / so Superfeedr can call you back
 * OPENID_URI your OpenId identifier if you want to use authentification for the reader functionality
 * DATABASE_URL database url path, see {here}[http://sequel.rubyforge.org/rdoc/files/doc/opening_databases_rdoc.html] for details
 * TIMEZONE the name of the timezone to use for example 'Europe/Paris', see http://www.twinsun.com/tz/tz-link.htm
-1 in the app directory run 'rackup'
-1 go to http://localhost:9292
+1. in the app directory run 'rackup'
+1. go to http://localhost:9292
 
 = Pages
 
