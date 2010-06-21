@@ -23,14 +23,7 @@ class Tidal
                            :public => params[:public] || false,
                            :subscription_validated => false)
         flash[:notice] = 'Feed added, subscription following'
-        Thread.new(params[:feed_uri], feed.id) do
-          result = superfeedr_request(params[:feed_uri], feed.id, 'subscribe')
-          if result.code == 202
-            log "Feed #{params[:feed_uri]} subscribed"
-          else
-            log "Error with feed #{params[:feed_uri]} #{params[:name]}: return code #{result.code},  #{result}"
-          end
-        end
+        superfeedr_request([{:uri => params[:feed_uri], :id => feed.id}], 'subscribe')
       rescue Sequel::ValidationFailed => e
         flash[:error] = "Error during feed creation #{e}"
       end
@@ -43,14 +36,10 @@ class Tidal
     if check_logged
       feed = Feed.where(:id => params[:feed]).first
       if feed
-        result = superfeedr_request(params[:feed_uri], feed.id, 'unsubscribe')
-        if result.code == 202
-          flash[:notice] = 'Feed removed'
-        else
-          flash[:error] = "Failure while removing feed #{params[:name]}: return code #{result.code},  #{result}"
-        end
+        superfeedr_request([{:uri => params[:feed_uri], :id => feed.id}], 'unsubscribe')
         Post(:feed_id => feed.id).delete
         Feed(:id => feed.id).delete
+        flash[:notice] = 'Feed removed, unsubscription following'
       else
         flash[:notice] = 'Feed not found'
       end
@@ -107,18 +96,12 @@ class Tidal
                              :display_content => true,
                              :public => true,
                              :subscription_validated => false)
-          added_feeds << [outline['xmlUrl'], feed.id]
+          added_feeds << {:uri => outline['xmlUrl'], :id => feed.id}
           feeds_number += 1
         end
       end
-      added_feeds.each do |f|
-        result = superfeedr_request(f[0], f[1], 'subscribe')
-        unless [202, 204].include? result.code
-          flash[:error] = "Failure while adding feed #{added_feeds[0]}: return code #{result.code},  #{result}"
-        end
-
-      end
-      flash[:notice] = "#{feeds_number.to_s} feeds added and #{duplicates_number} duplicates"
+      superfeedr_request(added_feeds, 'subscribe')
+      flash[:notice] = "#{feeds_number.to_s} feeds added and #{duplicates_number} duplicates, subscription following"
       log "opml file included"
       redirect '/admin'
     end
@@ -130,18 +113,27 @@ class Tidal
 
   private
 
-  def superfeedr_request feed_uri, feed_id, action
-    log "calling superfeedr for #{feed_id}"
-    result = RestClient::Request.execute(:method => :post,
-                                         :url => 'http://superfeedr.com/hubbub',
-                                         :payload => {'hub.mode'  => action,
-                                                      'hub.verify' => 'async',
-                                                      'hub.topic' => feed_uri,
-                                                      'hub.callback' => "#{ENV['SERVER_BASE_URL']}/callback/#{feed_id}"},
-                                         :user => ENV['SUPERFEEDER_LOGIN'],
-                                         :password => ENV['SUPERFEEDER_PASSWORD'])
-    log "superfeedr result #{result.code} for #{feed_id}"
-    result
+  # do a superfeedr request
+  # feeds is an array of {:uri, :db_id}
+  def superfeedr_request feeds, action
+    Thread.new(feeds, action) do
+      feeds.each do |feed|
+        log "calling superfeedr #{action} for #{feed[:uri]}"
+        result = RestClient::Request.execute(:method => :post,
+                                             :url => 'http://superfeedr.com/hubbub',
+                                             :payload => {'hub.mode'  => action,
+                                                          'hub.verify' => 'async',
+                                                          'hub.topic' => feed[:uri],
+                                                          'hub.callback' => "#{ENV['SERVER_BASE_URL']}/callback/#{feed[:id]}"},
+                                             :user => ENV['SUPERFEEDER_LOGIN'],
+                                             :password => ENV['SUPERFEEDER_PASSWORD'])
+        if result.code == 202
+          log "Feed #{feed[:uri]} #{action} ok"
+        else
+          log "Error with feed #{feed[:uri]} #{action} error: return code #{result.code}, #{result}"
+        end
+      end
+    end
   end
 
 end
