@@ -12,9 +12,7 @@ class Tidal
   # receive the new items
   post '/callback/:id' do
     if Feed.where(:id => params[:id]).update(:last_notification => DateTime.now) == 1
-      content = request.body.read
-      File.open("feed_#{params[:id]}.xml", 'w') { |f| f.write(content) }
-      Nokogiri::XML(content).css('entry').each do |entry|
+      Nokogiri::XML(request.body.read).css('entry').each do |entry|
         published_at = DateTime.now
         entry.css('published').each do |published|
           published_at = DateTime.parse(published.content)
