@@ -66,7 +66,7 @@ function displayAll() {
     display("/reader/render/all", {}, function() {
         $.each(feeds_information, function(i, category) {
             // update the categories
-            $("#category_" + i).removeClass("feedWithElements").html(name);
+            $("#category_" + i).removeClass("categoryWithElements").html(category.name);
 
             // update the feeds
             $.each(category.feeds, function (i, feed) {
