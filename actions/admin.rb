@@ -22,11 +22,14 @@ class Tidal
                            :display_content => params[:display_content] || false,
                            :public => params[:public] || false,
                            :subscription_validated => false)
-        result = superfeedr_request(params[:feed_uri], feed.id, 'subscribe')
-        if result.code == 202
-          flash[:notice] = 'Feed added'
-        else
-          flash[:error] = "Failure while adding feed #{params[:name]}: return code #{result.code},  #{result}"
+        flash[:notice] = 'Feed added, subscription following'
+        Thread.new(params[:feed_uri], feed.id) do
+          result = superfeedr_request(params[:feed_uri], feed.id, 'subscribe')
+          if result.code == 202
+            log "Feed #{params[:feed_uri]} subscribed"
+          else
+            log "Error with feed #{params[:feed_uri]} #{params[:name]}: return code #{result.code},  #{result}"
+          end
         end
       rescue Sequel::ValidationFailed => e
         flash[:error] = "Error during feed creation #{e}"
@@ -128,7 +131,7 @@ class Tidal
   private
 
   def superfeedr_request feed_uri, feed_id, action
-    log "caling superfeedr for #{feed_id}"
+    log "calling superfeedr for #{feed_id}"
     result = RestClient::Request.execute(:method => :post,
                                          :url => 'http://superfeedr.com/hubbub',
                                          :payload => {'hub.mode'  => action,
