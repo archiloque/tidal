@@ -1,8 +1,12 @@
 = What ?
 
-I've been fed up with bloglines bugs and don't like google reader so I decided to write my own feed readers, something clean without any clutter.
+I've been fed up with bloglines bugs and don't like google reader so I decided to write my own feed readers, something clean and without any clutter.
 
 J'ai ai eu marre des erreurs de bloglines et je n'aime pas google reader alors j'ai décidé d'écrire mon propre lecteur de fil rss, quelque chose de propre et sans fioriture.
+
+= Where ?
+
+I have deployed it on heroku at {http://tidal.heroku.com/}[http://tidal.heroku.com/]
 
 = How ?
 
