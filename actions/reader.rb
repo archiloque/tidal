@@ -18,9 +18,6 @@ class Tidal
             'group by feeds.id, feeds.category, feeds.name, feeds.display_content, feeds.site_uri ' +
             'order by feeds.category, feeds.name', false].each do |row|
       if row[:category] != current_category
-        if current_category != -1
-          feeds_per_category.last[:count] = current_count
-        end
         current_count = 0
         current_category = row[:category]
         feeds_per_category << {:name => (current_category || ''), :feeds => []}
@@ -32,6 +29,9 @@ class Tidal
                                           :display_content => row[:display_content],
                                           :site_uri => row[:site_uri],
                                           :category => row[:category] || ''}
+    end
+    if current_category != -1
+      feeds_per_category.last[:count] = current_count
     end
     halt 200, {'Content-Type' => 'application/json'}, feeds_per_category.to_json
   end

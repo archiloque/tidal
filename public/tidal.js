@@ -23,10 +23,11 @@ $(function () {
 
                 result += '<li class="categoryLi" id="categoryLi_' + i + '">\n'
                         + '\t<a id="categoryExpander_' + i + '" class="categoryExpander" onclick="clickCategoryExpander(' + i + '); return false" href="#">+</a>\n'
-                        + '\t<a href="#" id="category_' + i + ' class="categoryInfo' + (isCategoryEmpty ? '' : ' categoryWithElements' ) + '" onclick="displayCategory(\'' + categoryName + '\'); return false;">' + categoryName + '</a>';
+                        + '\t<a href="#" id="category_' + i + '" class="categoryInfo' + (isCategoryEmpty ? '' : ' categoryWithElements' ) + '" onclick="displayCategory(\'' + categoryName + '\'); return false;">' + categoryName;
                 if (! isCategoryEmpty) {
                     result += ' (' + itemsCount + ')';
                 }
+                result += '</a>';
                 result += '\n\t<ul class="feedUL">\n';
                 $.each(category.feeds, function (i, feed) {
                     var isFeedEmpty = (feed.count == 0);
@@ -83,7 +84,7 @@ function displayCategory(name) {
             if (category.name == name) {
 
                 // update the category
-                $("#category_" + i).removeClass("feedWithElements").html(name);
+                $("#category_" + i).removeClass("categoryWithElements").html(name);
 
                 // update the feeds
                 $.each(category.feeds, function (i, feed) {
@@ -106,8 +107,8 @@ function displayFeed(id) {
                 $.each(category.feeds, function (i, f) {
                     unreadFeed = unreadFeed || $("#feed_" + f.id).hasClass("feedWithElements");
                 });
-                if (unreadFeed) {
-                    $("#category_" + i).removeClass("feedWithElements").html(category.name);
+                if (!unreadFeed) {
+                    $("#category_" + i).removeClass("categoryWithElements").html(category.name);
                 }
             }
         });
@@ -149,7 +150,7 @@ function display(url, params, callback) {
 
 function postsRead() {
     $.get("/reader/postsRead", {displayedIds: displayedIds}, function(data) {
-        content.slideUp();
+        $("#readerContent").slideUp();
     });
 }
 
