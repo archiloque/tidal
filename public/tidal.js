@@ -30,6 +30,7 @@ $(function () {
                 result += '</a>';
                 result += '\n\t<ul class="feedUL">\n';
                 $.each(category.feeds, function (i, feed) {
+                    feed.category = category.name;
                     var isFeedEmpty = (feed.count == 0);
                     result += '\t\t<li class="feedLi">~ '
                             + '<a href="#" id="feed_' + feed.id + '" class="feedInfo' + (isFeedEmpty ? '' : ' feedWithElements') + '" onclick="displayFeed(' + feed.id + '); return false;">' + feed.name;

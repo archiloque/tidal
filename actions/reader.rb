@@ -19,17 +19,19 @@ class Tidal
             'group by feeds.id, feeds.category, feeds.name, feeds.display_content, feeds.site_uri ' +
             'order by feeds.category, feeds.name', false].each do |row|
       if row[:category] != current_category
-        current_count = 0
+        if current_category != -1
+          feeds_per_category.last[:count] = current_count
+        end
         current_category = row[:category]
         feeds_per_category << {:name => (current_category || ''), :feeds => []}
+        current_count = 0
       end
       current_count += row[:count]
       feeds_per_category.last[:feeds] << {:id => row[:id],
                                           :name => row[:name],
                                           :count => row[:count],
                                           :display_content => row[:display_content],
-                                          :site_uri => row[:site_uri],
-                                          :category => row[:category] || ''}
+                                          :site_uri => row[:site_uri]}
     end
     if current_category != -1
       feeds_per_category.last[:count] = current_count
