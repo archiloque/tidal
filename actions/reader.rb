@@ -4,6 +4,7 @@ class Tidal
   get '/reader' do
     if check_logged
       @js_include += ['jquery', 'tidal']
+      @title = 'reader'
       erb :'reader.html'
     end
   end
