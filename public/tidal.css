@@ -212,12 +212,11 @@ fieldset ul {
 /* reader */
 
 #readerSidebar {
-  position: fixed;
+  position: absolute;
   top: -10px;
   padding-top: 20px;
   padding-left: 10px;
   padding-bottom: 5px;
-  overflow-y: auto;
   width: 250px;
   border-right: #ccccdd solid 2px;
   border-bottom: #ccccdd solid 2px;
