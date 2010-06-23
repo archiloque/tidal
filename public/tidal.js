@@ -139,7 +139,11 @@ function display(url, params, callback) {
                 });
                 result += '\n\t</div>';
             });
-            result += '<div id="readOk"><a href="#" onclick="postsRead(); return false;">I\'ve read it all!</a></div>';
+            if (result != '') {
+                result += '<div id="readOk"><a href="#" onclick="postsRead(); return false;">I\'ve read it all!</a></div>';
+            } else {
+                result = 'No new post for the moment :-(';
+            }
             content.html(result);
             content.slideDown();
             if (callback != null) {
