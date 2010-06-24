@@ -5,7 +5,6 @@ class Tidal
     if resp = request.env['rack.openid.response']
       if resp.status == :success
         session[:user] = resp
-        flash[:notice] = 'Connecté'
         redirect '/reader'
       else
         halt 404, "Error: #{resp.status}"
