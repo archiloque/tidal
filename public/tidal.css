@@ -275,6 +275,9 @@ fieldset ul {
 #readerLogout {
   padding-top: 5px;
 }
+#readerLogout a {
+  font-weight: normal;
+}
 
 #readerContent {
   position: absolute;
