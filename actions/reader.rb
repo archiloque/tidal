@@ -81,8 +81,8 @@ class Tidal
       end
       parsed_post = Nokogiri::XML(row[:content])
       title = parsed_post.xpath('/entry/title')[0].content
-      link = parsed_post.xpath('/entry/link[@type=\'text/html\']')[0]
       content = parsed_post.xpath('/entry/summary')[0].andand.content || parsed_post.xpath('/entry/content')[0].andand.content
+      link = parsed_post.xpath('/entry/link[@type=\'text/html\']')[0]
       if link
         link = link['href']
       end

@@ -24,6 +24,19 @@ migration 'create table posts' do
   end
 end
 
+migration 'add post entry_id' do
+  database.add_column :posts, :entry_id, String, :size => 250, :null => true, :index => true, :unique => false
+
+  database['select id as id, content as content from posts'].each do |row|
+    parsed_post = Nokogiri::XML(row[:content])
+    entry_id = parsed_post.xpath('/entry/id')[0].content
+    if entry_id
+      database['update posts set entry_id = ? where id = ?', entry_id, row[:id]].each do |row|
+      end
+    end
+  end
+end
+
 class Feed < Sequel::Model
   one_to_many :posts
 
