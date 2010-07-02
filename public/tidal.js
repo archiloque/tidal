@@ -38,7 +38,7 @@ $(function () {
                         result += ' (' + feed.count + ')';
                     }
                     result += '</a>'
-                            + '<a title="Display past articles of this feed" onclick="displayPastArticles(' + feed.id + ')" href="#">⇥</a>'
+                            + '<a title="Display past articles of this feed" onclick="displayPastArticles(' + feed.id + '); return false;" href="#">⇥</a>'
                             + '</li>\n';
                 });
                 result += '\t</ul>\n</li>\n';
