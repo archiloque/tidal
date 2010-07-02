@@ -1,7 +1,7 @@
 source :gemcutter
 
 gem 'sinatra', '1.0'
-gem 'sequel', '3.11.0'
+gem 'sequel', '3.13.0'
 gem 'sinatra-sequel', '0.9.0'
 gem 'rack-openid', '1.0.3'
 gem 'rack-flash', '0.1.1'
