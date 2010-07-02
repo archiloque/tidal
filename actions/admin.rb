@@ -37,8 +37,8 @@ class Tidal
       feed = Feed.where(:id => params[:feed]).first
       if feed
         superfeedr_request([{:uri => params[:feed_uri], :id => feed.id}], 'unsubscribe')
-        Post(:feed_id => feed.id).delete
-        Feed(:id => feed.id).delete
+        Post.where(:feed_id => feed.id).delete
+        Feed.where(:id => feed.id).delete
         flash[:notice] = 'Feed removed, unsubscription following'
       else
         flash[:notice] = 'Feed not found'
