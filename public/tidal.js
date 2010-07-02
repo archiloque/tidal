@@ -121,7 +121,7 @@ function displayPastArticles(id) {
     display("/reader/render/past/" + id, {}, false, null);
 }
 
-function display(url, params, save_posts_ids, callback) {
+function display(url, params, new_posts, callback) {
     params.displayedIds = displayedIds;
     $.getJSON(url, params, function(data) {
         var content = $("#readerContent");
@@ -134,7 +134,7 @@ function display(url, params, save_posts_ids, callback) {
                 result += '\n<div class="feedContent">'
                         + '\n\t<div class="feedTitle"><a href="' + feed.site_uri + '">' + feedName + '</a></div>';
                 $.each(feedItem.posts, function(id, post) {
-                    if (save_posts_ids) {
+                    if (new_posts) {
                         displayedIds.push(post.id);
                     }
                     result += '\n\t\t<div class="postHeader">'
@@ -146,7 +146,7 @@ function display(url, params, save_posts_ids, callback) {
                 });
                 result += '\n\t</div>';
             });
-            if (result != '') {
+            if ((result != '') && new_posts) {
                 result += '<div id="readOk"><a href="#" onclick="postsRead(); return false;">I\'ve read it all</a></div>';
             } else {
                 result = 'Nothing to display';
