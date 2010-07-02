@@ -54,6 +54,11 @@ class Tidal
             'from posts, feeds where feeds.id = posts.feed_id and posts.read = ? and feeds.id = ? order by feeds.category, feeds.name, posts.published_at', false, params[:id]]
   end
 
+  get '/reader/render/past/:id' do
+    render_posts ['select posts.id as id, posts.published_at as published_at, posts.content as content, posts.feed_id as feed_id ' +
+            'from posts, feeds where feeds.id = posts.feed_id and feeds.id = ? order by feeds.category, feeds.name, posts.published_at limit 50', params[:id]]
+  end
+
   get '/reader/postsRead' do
     if params[:displayedIds]
       Post.filter(:id => params[:displayedIds]).update(:read => true)

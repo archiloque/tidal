@@ -14,7 +14,7 @@ $(function () {
     if ($("#readerFeedsInfo").length > 0) {
         $.get('/reader/feeds_info', function(data) {
             feeds_information = data;
-            var result = '<ul><a id="displayAll" href="#" onclick="displayAll(); return false">All</a>';
+            var result = '<ul><a id="displayAll" title="Display all unread items" href="#" onclick="displayAll(); return false">All</a>';
             $.each(feeds_information, function(i, category) {
 
                 var itemsCount = category.count;
@@ -23,7 +23,7 @@ $(function () {
 
                 result += '<li class="categoryLi" id="categoryLi_' + i + '">\n'
                         + '\t<a id="categoryExpander_' + i + '" class="categoryExpander" onclick="clickCategoryExpander(' + i + '); return false" href="#">+</a>\n'
-                        + '\t<a href="#" id="category_' + i + '" class="categoryInfo' + (isCategoryEmpty ? '' : ' categoryWithElements' ) + '" onclick="displayCategory(\'' + categoryName + '\'); return false;">' + categoryName;
+                        + '\t<a href="#" id="category_' + i + '" class="categoryInfo' + (isCategoryEmpty ? '' : ' categoryWithElements' ) + '" title="Display unread items of this category" onclick="displayCategory(\'' + categoryName + '\'); return false;">' + categoryName;
                 if (! isCategoryEmpty) {
                     result += ' (' + itemsCount + ')';
                 }
@@ -33,11 +33,12 @@ $(function () {
                     feed.category = category.name;
                     var isFeedEmpty = (feed.count == 0);
                     result += '\t\t<li class="feedLi">~ '
-                            + '<a href="#" id="feed_' + feed.id + '" class="feedInfo' + (isFeedEmpty ? '' : ' feedWithElements') + '" onclick="displayFeed(' + feed.id + '); return false;">' + feed.name;
+                            + '<a href="#" id="feed_' + feed.id + '" class="feedInfo' + (isFeedEmpty ? '' : ' feedWithElements') + '" title="Display unread items of this feed" onclick="displayFeed(' + feed.id + '); return false;">' + feed.name;
                     if (!isFeedEmpty) {
                         result += ' (' + feed.count + ')';
                     }
                     result += '</a>'
+                            + '<a title="Display past articles of this feed" onclick="displayPastArticles(' + feed.id + ')" href="#">⇥</a>'
                             + '</li>\n';
                 });
                 result += '\t</ul>\n</li>\n';
@@ -64,7 +65,7 @@ function clickCategoryExpander(i) {
 }
 
 function displayAll() {
-    display("/reader/render/all", {}, function() {
+    display("/reader/render/all", {}, true, function() {
         $.each(feeds_information, function(i, category) {
             // update the categories
             $("#category_" + i).removeClass("categoryWithElements").html(category.name);
@@ -79,7 +80,7 @@ function displayAll() {
 
 // display unread posts from this category
 function displayCategory(name) {
-    display("/reader/render/category", {name: name}, function() {
+    display("/reader/render/category", {name: name}, true, function() {
         // find the category
         $.each(feeds_information, function(i, category) {
             if (category.name == name) {
@@ -98,7 +99,7 @@ function displayCategory(name) {
 
 // display unread posts from this feed
 function displayFeed(id) {
-    display("/reader/render/feed/" + id, {}, function() {
+    display("/reader/render/feed/" + id, {}, true, function() {
         var feed = getFeed(id);
         $("#feed_" + id).removeClass("feedWithElements").html(feed.name);
         $.each(feeds_information, function(i, category) {
@@ -116,7 +117,11 @@ function displayFeed(id) {
     });
 }
 
-function display(url, params, callback) {
+function displayPastArticles(id) {
+    display("/reader/render/past/" + id, {}, false, null);
+}
+
+function display(url, params, save_posts_ids, callback) {
     params.displayedIds = displayedIds;
     $.getJSON(url, params, function(data) {
         var content = $("#readerContent");
@@ -129,7 +134,9 @@ function display(url, params, callback) {
                 result += '\n<div class="feedContent">'
                         + '\n\t<div class="feedTitle"><a href="' + feed.site_uri + '">' + feedName + '</a></div>';
                 $.each(feedItem.posts, function(id, post) {
-                    displayedIds.push(post.id);
+                    if (save_posts_ids) {
+                        displayedIds.push(post.id);
+                    }
                     result += '\n\t\t<div class="postHeader">'
                             + '<a id="postExpander_' + post.id + '" href="#" onclick="clickPostExpander(' + post.id + '); return false;">' + (feed.display_content ? '-' : '+' ) + '</a> '
                             + '<a href="' + post.link + '" target="_blank">' + post.title + '</a>'
@@ -140,9 +147,9 @@ function display(url, params, callback) {
                 result += '\n\t</div>';
             });
             if (result != '') {
-                result += '<div id="readOk"><a href="#" onclick="postsRead(); return false;">I\'ve read it all!</a></div>';
+                result += '<div id="readOk"><a href="#" onclick="postsRead(); return false;">I\'ve read it all</a></div>';
             } else {
-                result = 'No new post for the moment :-(';
+                result = 'Nothing to display';
             }
             content.html(result);
             content.slideDown();
