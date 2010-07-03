@@ -96,12 +96,6 @@ class Tidal < Sinatra::Base
   end
 
   get '/atom' do
-    feeds_per_id = {}
-    feeds = Feed.filter(:public => true).order(:category.asc, :name.asc)
-    feeds.each do |feed|
-      feeds_per_id[feed.id] = feed
-    end
-
     content_type 'application/atom+xml', :charset => 'utf-8'
     builder do |xml|
       xml.instruct! :xml, :version => '1.0'
@@ -118,8 +112,7 @@ class Tidal < Sinatra::Base
             xml.updated Time.parse(last_post.published_at.to_s).xmlschema
           end
 
-
-          Post.filter('feed_id in (select id from feeds where public is ?)', true).order(:published_at.desc).limit(2).each do |post|
+          Post.filter('feed_id in (select id from feeds where public is ?)', true).order(:published_at.desc).limit(50).each do |post|
             xml << post.content
         end
       end
