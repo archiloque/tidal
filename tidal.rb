@@ -12,6 +12,8 @@ require 'andand'
 require 'sinatra/base'
 require 'rack-flash'
 
+require 'builder'
+
 ENV['DATABASE_URL'] ||= "sqlite://#{Dir.pwd}/tidal.sqlite3"
 ['SUPERFEEDER_LOGIN', 'SUPERFEEDER_PASSWORD', 'SERVER_BASE_URL', 'TIMEZONE'].each do |param|
   unless ENV[param]
@@ -91,6 +93,37 @@ class Tidal < Sinatra::Base
     end
     @posts = Post.filter('feed_id in (select id from feeds where public is ?)', true).order(:published_at.desc).limit(100)
     erb :'index.html'
+  end
+
+  get '/atom' do
+    feeds_per_id = {}
+    feeds = Feed.filter(:public => true).order(:category.asc, :name.asc)
+    feeds.each do |feed|
+      feeds_per_id[feed.id] = feed
+    end
+
+    content_type 'application/atom+xml', :charset => 'utf-8'
+    builder do |xml|
+      xml.instruct! :xml, :version => '1.0'
+      xml.feed :xmlns => 'http://www.w3.org/2005/Atom' do
+          xml.title 'Tidal, Archiloque\'s feed reader'
+          xml.subtitle 'All I read, may or may not be interesting for you'
+          xml.link :href => ENV['SERVER_BASE_URL']
+          xml.generator 'Tidal', :uri => 'http://github.com/archiloque/tidal'
+          xml.id "#{ENV['SERVER_BASE_URL']}/"
+          xml.logo '/apple-touch-icon.png'
+
+          last_post = Post.filter('feed_id in (select id from feeds where public is ?)', true).order(:published_at.desc).first
+          if last_post
+            xml.updated Time.parse(last_post.published_at.to_s).xmlschema
+          end
+
+
+          Post.filter('feed_id in (select id from feeds where public is ?)', true).order(:published_at.desc).limit(2).each do |post|
+            xml << post.content
+        end
+      end
+    end
   end
 
   private
