@@ -146,8 +146,10 @@ function display(url, params, new_posts, callback) {
                 });
                 result += '\n\t</div>';
             });
-            if ((result != '') && new_posts) {
-                result += '<div id="readOk"><a href="#" onclick="postsRead(); return false;">I\'ve read it all</a></div>';
+            if (result != '') {
+                if (new_posts) {
+                    result += '<div id="readOk"><a href="#" onclick="postsRead(); return false;">I\'ve read it all</a></div>';
+                }
             } else {
                 result = 'Nothing to display';
             }
