@@ -17,16 +17,19 @@ class Tidal
         entry.css('published').each do |published|
           published_at = DateTime.parse(published.content)
         end
-        
-        entry_id = entry.css('id')[0].andand.content
 
-        # protection agains duplicates
-        if (entry_id.blank? || (Post.where(:entry_id => entry_id, :feed_id => params[:id]).count == 0))
-          Post.create(:content => entry.serialize,
-                      :read => false,
-                      :feed_id => params[:id],
-                      :published_at => published_at,
-                      :entry_id => entry_id)
+        # no old entries
+        if ((DateTime.now - published_at) > 7)
+          entry_id = entry.css('id')[0].andand.content
+
+          # protection agains duplicates
+          if (entry_id.blank? || (Post.where(:entry_id => entry_id, :feed_id => params[:id]).count == 0))
+            Post.create(:content => entry.serialize,
+                        :read => false,
+                        :feed_id => params[:id],
+                        :published_at => published_at,
+                        :entry_id => entry_id)
+          end
         end
       end
     end
