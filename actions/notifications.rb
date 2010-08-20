@@ -19,7 +19,7 @@ class Tidal
         end
 
         # no old entries
-        if ((DateTime.now - published_at) > 7)
+        if ((DateTime.now - published_at) < 7)
           entry_id = entry.css('id')[0].andand.content
 
           # protection agains duplicates
