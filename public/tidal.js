@@ -35,7 +35,7 @@ $(function () {
                     result += '\t\t<li class="feedLi">~ '
                             + '<a href="#" id="feed_' + feed.id + '" class="feedInfo' + (isFeedEmpty ? '' : ' feedWithElements') + '" title="Display unread items of this feed" onclick="displayFeed(' + feed.id + '); return false;">' + feed.name;
                     if (!isFeedEmpty) {
-                        result += ' (' + feed.count + ')';
+                        result += ' (<span id="feedNumberPosts_' + feed.id + '">' + feed.count + '</span>)';
                     }
                     result += '</a>'
                             + '<a title="Display past articles of this feed" onclick="displayPastArticles(' + feed.id + '); return false;" href="#">⇥</a>'
@@ -104,13 +104,18 @@ function displayFeed(id) {
         $("#feed_" + id).removeClass("feedWithElements").html(feed.name);
         $.each(feeds_information, function(i, category) {
             if (category.name == feed.category) {
-                // we found the category, now we look if one of the feed still contain unread feeds
-                var unreadFeed = false;
+
+                // we found the category, now we look if some of its feeds still contain unread messages
+                var numberUnreadMessages = 0;
                 $.each(category.feeds, function (i, f) {
-                    unreadFeed = unreadFeed || $("#feed_" + f.id).hasClass("feedWithElements");
+                    if($("#feed_" + f.id).hasClass("feedWithElements")) {
+                        numberUnreadMessages += parseInt($("#feedNumberPosts_" + f.id).html());
+                    }
                 });
-                if (!unreadFeed) {
+                if (numberUnreadMessages == 0) {
                     $("#category_" + i).removeClass("categoryWithElements").html(category.name);
+                } else {
+                    $("#category_" + i).html(category.name + ' (' + numberUnreadMessages + ')');
                 }
             }
         });
