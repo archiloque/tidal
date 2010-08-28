@@ -90,7 +90,7 @@ function displayCategory(name) {
 
                 // update the feeds
                 $.each(category.feeds, function (i, feed) {
-                    $("#feed_" + feed.id).removeClass("feedWithElements").html(feed.id.name);
+                    $("#feed_" + feed.id).removeClass("feedWithElements").html(feed.name);
                 });
             }
         });
