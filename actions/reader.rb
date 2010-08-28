@@ -82,6 +82,24 @@ class Tidal
       parsed_post = Nokogiri::XML(row[:content])
       title = parsed_post.xpath('/entry/title')[0].content
       content = parsed_post.xpath('/entry/summary')[0].andand.content || parsed_post.xpath('/entry/content')[0].andand.content
+      if content
+        parsed_content = Nokogiri::HTML(content)
+
+        # remove scripts
+        parsed_content.css('script').each do |node|
+          node.unlink
+        end
+
+        # inline noscripts contents
+        parsed_content.css('noscript').each do |node|
+          node.elements.each do |sub|
+            node.add_next_sibling sub
+          end
+          node.unlink
+        end
+
+        content = parsed_content.to_s
+      end
       link = parsed_post.xpath('/entry/link[@type=\'text/html\']')[0]
       if link
         link = link['href']
