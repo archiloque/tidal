@@ -7,6 +7,6 @@ unless ENV['SERVER_BASE_URL']
   raise "'SERVER_BASE_URL' env parameter is missing"
 end
 
-task :cron => :environment do
+task :cron do
   RestClient.post "#{ENV['SERVER_BASE_URL']}/purge", {}
 end
