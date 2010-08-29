@@ -78,6 +78,7 @@ a:hover {
 
 .postDate {
   font-size: 12px;
+  padding-left: 2px;
 }
 
 .postContent {
