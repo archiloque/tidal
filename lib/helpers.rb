@@ -49,6 +49,10 @@ module Sinatra
       possible_values.collect { |key, value| "<option value=\"#{value}\"#{(value == selected_value) ? ' selected="selected' : ''}>#{key}</option>" }.join('')
     end
 
+    def input_from_list possible_values
+      possible_values.collect { |value| "<option>#{value}</option>" }.join('')
+    end
+
     def display_feeds_select feeds, id = nil
       r = "<li><label for=\"feed\">Feed</label> <select name=\"feed\"#{id ? "id=\"#{id}\"" : ''}>"
       current_category = nil

@@ -31,10 +31,7 @@ end.to_json};" %>;
                 <li>
                   <label for="category">Category</label>
                   <select name="category_select">
-                    <%= input_select_content(@categories.inject({'' => ''}) do |hash, v|
-                      hash[v] = v
-                      hash
-                    end) %>
+                    <%= input_from_list(@categories) %>
                   </select>
                   &nbsp; or &nbsp;
                   <input id="category_text" name="category_text" type="text" value="" size="10"/>
@@ -81,10 +78,7 @@ end.to_json};" %>;
                   <li>
                     <label for="category_before">From</label>
                     <select name="category_before">
-                      <%= input_select_content(@categories.inject({}) do |hash, v|
-                        hash[v] = v
-                        hash
-                      end) %>
+                      <%= input_from_list(@categories) %>
                     </select>
                   </li>
                   <li><%= input_text('category_after', 'To') %></li>
