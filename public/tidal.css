@@ -63,6 +63,11 @@ a:hover {
   padding-bottom: 10px
 }
 
+.postExpander {
+  width: 12px;
+  display: inline-block;
+}
+
 .postHeader a {
   background-color: #F5F5F5;
 }

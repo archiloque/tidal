@@ -143,7 +143,7 @@ function display(url, params, new_posts, callback) {
                         displayedIds.push(post.id);
                     }
                     result += '\n\t\t<div class="postHeader">'
-                            + '<a id="postExpander_' + post.id + '" href="#" onclick="clickPostExpander(' + post.id + '); return false;">' + (feed.display_content ? '-' : '+' ) + '</a> '
+                            + '<span class="postExpander"><a id="postExpander_' + post.id + '" href="#" onclick="clickPostExpander(' + post.id + '); return false;">' + (feed.display_content ? '–' : '+' ) + '</a></span> '
                             + '<a href="' + post.link + '" target="_blank">' + post.title + '</a>'
                             + '<span class="postDate">' + post.published_at + '</span>'
                             + '</div>'
