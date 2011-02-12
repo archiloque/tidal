@@ -22,7 +22,7 @@ class Tidal
         if ((DateTime.now - published_at) < 7)
           entry_id = entry.css('id')[0].andand.content
 
-          # protection agains duplicates
+          # protection against duplicates
           if (entry_id.blank? || (Post.where(:entry_id => entry_id, :feed_id => params[:id]).count == 0))
             Post.create(:content => entry.serialize,
                         :read => false,
