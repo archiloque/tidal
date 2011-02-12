@@ -69,7 +69,7 @@ class Tidal
   private
 
   def render_posts query
-    if params[:displayedIds]
+    unless params[:displayedIds].blank?
       Post.filter(:id => params[:displayedIds]).update(:read => true)
     end
     posts_per_feeds = []
