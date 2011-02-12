@@ -8,5 +8,5 @@ unless ENV['SERVER_BASE_URL']
 end
 
 task :cron do
-  RestClient.post "#{ENV['SERVER_BASE_URL']}/purge", {}
+  p RestClient.post "#{ENV['SERVER_BASE_URL']}/purge", {}
 end
