@@ -40,22 +40,22 @@ class Tidal
   end
 
   get '/reader/render/all' do
-    render_posts ['select posts.id as id, posts.published_at as published_at, posts.content as content, posts.feed_id as feed_id ' +
+    render_posts ['select posts.id as id, posts.published_at as published_at, posts.content as content, posts.feed_id as feed_id, feeds.site_uri as site_uri ' +
             'from posts, feeds where feeds.id = posts.feed_id and posts.read = ? order by feeds.category, feeds.name, posts.published_at', false]
   end
 
   get '/reader/render/category' do
-    render_posts ['select posts.id as id, posts.published_at as published_at, posts.content as content, posts.feed_id as feed_id ' +
+    render_posts ['select posts.id as id, posts.published_at as published_at, posts.content as content, posts.feed_id as feed_id, feeds.site_uri as site_uri ' +
             'from posts, feeds where feeds.id = posts.feed_id and posts.read = ? and feeds.category = ? order by feeds.category, feeds.name, posts.published_at', false, params[:name]]
   end
 
   get '/reader/render/feed/:id' do
-    render_posts ['select posts.id as id, posts.published_at as published_at, posts.content as content, posts.feed_id as feed_id ' +
+    render_posts ['select posts.id as id, posts.published_at as published_at, posts.content as content, posts.feed_id as feed_id, feeds.site_uri as site_uri ' +
             'from posts, feeds where feeds.id = posts.feed_id and posts.read = ? and feeds.id = ? order by feeds.category, feeds.name, posts.published_at', false, params[:id]]
   end
 
   get '/reader/render/past/:id' do
-    render_posts ['select posts.id as id, posts.published_at as published_at, posts.content as content, posts.feed_id as feed_id ' +
+    render_posts ['select posts.id as id, posts.published_at as published_at, posts.content as content, posts.feed_id as feed_id, feeds.site_uri as site_uri ' +
             'from posts, feeds where feeds.id = posts.feed_id and feeds.id = ? order by feeds.category, feeds.name, posts.published_at limit 50', params[:id]]
   end
 
@@ -102,7 +102,7 @@ class Tidal
       end
       link = parsed_post.xpath('/entry/link[@type=\'text/html\']')[0]
       if link
-        link = link['href']
+        link = join_and_canonize(row[:site_uri], link['href'])
       end
       posts_per_feeds.last[:posts] << {:published_at => row[:published_at].strftime("%d/%m %H:%M"),
                                        :title => title,

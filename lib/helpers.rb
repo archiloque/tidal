@@ -1,4 +1,5 @@
 require 'sinatra/base'
+require 'addressable/uri'
 
 class Object
 
@@ -76,6 +77,10 @@ module Sinatra
       if date
         date.strftime("%d/%m/%Y #{between}%H:%M:%S")
       end
+    end
+
+    def join_and_canonize base_url, url
+      Addressable::URI.join(base_url, url).normalize.to_s
     end
 
 

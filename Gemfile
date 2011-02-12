@@ -1,5 +1,6 @@
 source "http://rubygems.org"
 
+gem 'addressable', '2.2.4'
 gem 'sinatra', '1.1.2'
 gem 'sequel', '3.20.0'
 gem 'sinatra-sequel', '0.9.0'
