@@ -19,16 +19,23 @@ class Tidal
         end
 
         # no old entries
-        if ((DateTime.now - published_at) < 7)
+        now = DateTime.now
+        if ((now - published_at) < 7)
+
+          # publish date is too much in the future -> set it to now 
+          if ((now - published_at) > -1)
+            published_at = now
+          end
+
           entry_id = entry.css('id')[0].andand.content
 
           # protection against duplicates
           if (entry_id.blank? || (Post.where(:entry_id => entry_id, :feed_id => params[:id]).count == 0))
-            Post.create(:content => entry.serialize,
-                        :read => false,
-                        :feed_id => params[:id],
+            Post.create(:content      => entry.serialize,
+                        :read         => false,
+                        :feed_id      => params[:id],
                         :published_at => published_at,
-                        :entry_id => entry_id)
+                        :entry_id     => entry_id)
           end
         end
       end
