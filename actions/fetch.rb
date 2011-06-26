@@ -32,6 +32,7 @@ module TZInfo
           if results.is_a?(TimezonePeriod)
             results
           else
+            # hack is here
             results.first
           end
         end
