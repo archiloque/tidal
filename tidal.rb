@@ -1,13 +1,12 @@
-require 'rubygems'
 require 'bundler'
 Bundler.setup
 
 require 'json'
 require 'logger'
 require 'tzinfo'
-require 'rest_client'
 require 'nokogiri'
 require 'andand'
+require 'feedzirra'
 
 require 'sinatra/base'
 require 'rack-flash'
@@ -15,15 +14,11 @@ require 'rack-flash'
 require 'builder'
 
 ENV['DATABASE_URL'] ||= "sqlite://#{Dir.pwd}/tidal.sqlite3"
-['SUPERFEEDER_LOGIN', 'SUPERFEEDER_PASSWORD', 'SERVER_BASE_URL', 'TIMEZONE'].each do |param|
+['TIMEZONE'].each do |param|
   unless ENV[param]
     raise "#{param} env parameter is missing"
   end
 end
-if ENV['SERVER_BASE_URL'][-1, 1] == '/'
-  raise "SERVER_BASE_URL env parameter should not end with a '/'"
-end
-
 
 require 'sinatra'
 require 'sinatra/sequel'
@@ -33,19 +28,6 @@ Sequel.default_timezone = TZInfo::Timezone.get(ENV['TIMEZONE'])
 Sequel::Model.raise_on_save_failure = true
 require 'erb'
 
-module Sequel
-  class Database
-    def table_exists?(name)
-      begin
-        from(name).first
-        true
-      rescue Exception
-        false
-      end
-    end
-  end
-end
-
 class Tidal < Sinatra::Base
 
   set :views, File.dirname(__FILE__) + '/views'
@@ -54,8 +36,6 @@ class Tidal < Sinatra::Base
   set :show_exceptions, :true
   if ENV['LOGGING']
     set :logging, true
-    RestClient.log = 'stdout'
-  else
     set :logging, false
   end
 
@@ -71,8 +51,8 @@ class Tidal < Sinatra::Base
   require 'rack/openid'
   use Rack::OpenID
 
-  require 'lib/models'
-  require 'lib/helpers'
+  require_relative 'lib/models'
+  require_relative 'lib/helpers'
   helpers Sinatra::TidalHelper
 
   use Rack::Flash
@@ -100,20 +80,20 @@ class Tidal < Sinatra::Base
     builder do |xml|
       xml.instruct! :xml, :version => '1.0'
       xml.feed :xmlns => 'http://www.w3.org/2005/Atom' do
-          xml.title 'Tidal, Archiloque\'s feed reader'
-          xml.subtitle 'All I read, may or may not be interesting for you'
-          xml.link :href => ENV['SERVER_BASE_URL']
-          xml.generator 'Tidal', :uri => 'http://github.com/archiloque/tidal'
-          xml.id "#{ENV['SERVER_BASE_URL']}/"
-          xml.logo '/apple-touch-icon.png'
+        xml.title 'Tidal, Archiloque\'s feed reader'
+        xml.subtitle 'All I read, may or may not be interesting for you'
+        xml.link :href => ENV['SERVER_BASE_URL']
+        xml.generator 'Tidal', :uri => 'http://github.com/archiloque/tidal'
+        xml.id "#{ENV['SERVER_BASE_URL']}/"
+        xml.logo '/apple-touch-icon.png'
 
-          last_post = Post.filter('feed_id in (select id from feeds where public is ?)', true).order(:published_at.desc).first
-          if last_post
-            xml.updated Time.parse(last_post.published_at.to_s).xmlschema
-          end
+        last_post = Post.filter('feed_id in (select id from feeds where public is ?)', true).order(:published_at.desc).first
+        if last_post
+          xml.updated Time.parse(last_post.published_at.to_s).xmlschema
+        end
 
-          Post.filter('feed_id in (select id from feeds where public is ?)', true).order(:published_at.desc).limit(50).each do |post|
-            xml << post.content
+        Post.filter('feed_id in (select id from feeds where public is ?)', true).order(:published_at.desc).limit(50).each do |post|
+          xml << post.content
         end
       end
     end
@@ -129,7 +109,7 @@ class Tidal < Sinatra::Base
 
 end
 
-require 'actions/admin'
-require 'actions/login'
-require 'actions/reader'
-require 'actions/notifications'
+require_relative 'actions/admin'
+require_relative 'actions/fetch'
+require_relative 'actions/login'
+require_relative 'actions/reader'

@@ -2,7 +2,7 @@ Sequel::Model.plugin :validation_helpers
 
 migration 'create table feeds' do
   database.create_table :feeds do
-    primary_key :id, :type=>Integer, :null => false
+    primary_key :id, :type => Integer, :null => false
     String :name, :size => 250, :null => true, :index => true, :unique => true
     String :category, :size => 250, :null => false, :index => true, :unique => false
     String :site_uri, :size => 250, :null => false
@@ -16,7 +16,7 @@ end
 
 migration 'create table posts' do
   database.create_table :posts do
-    primary_key :id, :type=>Integer, :null => false
+    primary_key :id, :type => Integer, :null => false
     DateTime :published_at, :null => false, :index => true, :unique => false
     Text :content, :text => true
     foreign_key :feed_id, :feeds
@@ -35,6 +35,30 @@ migration 'add post entry_id' do
       end
     end
   end
+end
+
+migration 'move to feedzirra' do
+
+  database.drop_column :feeds, :last_notification
+  database.drop_column :feeds, :subscription_validated
+
+  database.add_column :feeds, :last_fetch, DateTime, :null => true, :index => true, :unique => false
+  database['update feeds set last_fetch = ? ', DateTime.civil(2000, 1, 1)].each do |row|
+  end
+  database.set_column_type :feeds, :last_fetch, DateTime, :null => false
+
+  database.add_index :feeds, :feed_uri, :unique => true
+
+  database.add_column :feeds, :last_post, DateTime, :null => true
+  database['update feeds set last_post = (select max(published_at) from posts where posts.feed_id = feeds.id)'].each do |row|
+  end
+
+  database['delete from posts'].each do |row|
+  end
+
+  database.add_column :posts, :title, String, :null => true
+  database.add_column :posts, :uri, String, :null => true
+  database.set_column_type :posts, :content, String, :null => true
 end
 
 class Feed < Sequel::Model
@@ -66,8 +90,7 @@ end
 class Post < Sequel::Model
   many_to_one :feed
 
-  def validate
-    validates_presence :content
+  def validateen
     validates_presence :published_at
     validates_presence :feed_id
   end

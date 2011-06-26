@@ -23,20 +23,14 @@
 
   <% for post in @posts %>
       <% feed = @feeds_per_id[post.feed_id] %>
-      <% parsed_post = Nokogiri::XML(post.content) %>
-      <% link = parsed_post.xpath('/entry/link[@type=\'text/html\']')[0] %>
+      <% link = post.uri %>
       <% if link
-             link = join_and_canonize(feed.site_uri, link['href'])
+             link = join_and_canonize(feed.site_uri, link)
          end %>
-      <% title = parsed_post.xpath('/entry/title')[0].content %>
-      <% content = parsed_post.xpath('/entry/summary')[0].andand.content %>
-      <% if content.blank?
-          content = parsed_post.xpath('/entry/content')[0].andand.content
-      end %>
       <%= "<div class=\"postHeader\">〰 " +
-                  "<a href=\"#{feed.site_uri}\">#{feed.name}</a> – #{link ? "<a href=\"#{link}\">#{title}</a>" : title}" +
+                  "<a href=\"#{feed.site_uri}\">#{feed.name}</a> – #{link ? "<a href=\"#{link}\">#{post.title}</a>" : post.title}" +
                   "<span class=\"postDate\"> #{post.published_at.strftime("%d/%m %H:%M")}</span>" +
                   "</div>" %>
-      <%= "<div class=\"postContent\">#{content}</div>" %>
+      <%= "<div class=\"postContent\">#{post.content}</div>" %>
   <% end %>
 </div>

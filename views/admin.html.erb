@@ -113,10 +113,10 @@ end.to_json};" %>;
                   <th>Name</th>
                   <th>Display content</th>
                   <th>Public</th>
-                  <th>Last update</th>
+                  <th>Last fetch</th>
+                  <th>Last post</th>
                   <th>Site URI</th>
                   <th>Feed URI</th>
-                  <th>Subscription Validated</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -126,10 +126,10 @@ end.to_json};" %>;
                     <td><%= feed.name %></td>
                     <td><%= feed.display_content ? 'yes' : 'no' %></td>
                     <td><%= feed.public ? 'yes' : 'no' %></td>
-                    <td><%= display_date_time(feed.last_notification) %></td>
+                    <td><%= display_date_time(feed.last_fetch) %></td>
+                    <td><%= display_date_time(feed.last_post) %></td>
                     <td><%= "<a href=\"#{feed.site_uri}\">#{feed.site_uri}</a>" %></td>
                     <td><%= "<a href=\"#{feed.feed_uri}\">#{feed.feed_uri}</a>" %></td>
-                    <td><%= feed.subscription_validated ? 'yes' : 'no' %></td>
                   </tr>
                 <% end %>
                 </tbody>
