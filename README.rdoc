@@ -1,8 +1,6 @@
 = What ?
 
-I've been fed up with bloglines bugs and don't like google reader so I decided to write my own feed readers, something clean and without any clutter.
-
-J'ai ai eu marre des erreurs de bloglines et je n'aime pas google reader alors j'ai décidé d'écrire mon propre lecteur de fil rss, quelque chose de propre et sans fioriture.
+I've been fed up with bloglines bugs and don't like the cluttered interface of google reader so I decided to write my own feed readers.
 
 = Where ?
 
@@ -10,9 +8,9 @@ I have deployed it on heroku at {http://tidal.heroku.com/}[http://tidal.heroku.c
 
 = How ?
 
-{Feedzirra}[https://github.com/pauldix/feedzirra] does the heavy job of checking all the sites for new items .
+{Feedzirra}[https://github.com/pauldix/feedzirra] does the heavy job of checking all the sites for new items.
 
-Then I just have to store the data and display them, this is done in ruby using Sinatar and Sequel.
+Then I just have to store the data and display them, this is done in ruby using Sinatra and Sequel.
 
 Design copiously inspired from Sam Ruby's excellent {Planet Intertwingly}[http://planet.intertwingly.net/].
 
@@ -29,12 +27,14 @@ Requirements: ruby and git
 * TIMEZONE the name of the timezone to use for example 'Europe/Paris', see http://www.twinsun.com/tz/tz-link.htm
 1. in the app directory run 'rackup'
 1. go to http://localhost:9292
+1 cron a call to http://localhost:9292/fetch to fetch the feeds for updates
 
 = Pages
 
 * '/' a planet-like page presenting the lastest pages of your public feeds
-* '/admin' the administration page to add/edit/delete your feeds your feeds
 * '/reader' the reader page
+* '/admin' the administration page to add/edit/delete your feeds your feeds
+* '/fetch' fetch the feeds for updates
 
 = LICENSE:
 
