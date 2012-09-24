@@ -99,7 +99,7 @@ class Tidal
         create_post(entry, f)
       end
     rescue Exception => e
-      p e
+      p "#{url} #{e}"
       e.backtrace.each{|b| p}
     end
   end
