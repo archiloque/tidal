@@ -108,7 +108,7 @@ class Tidal
   # entry: the feed Entry
   # feed: the Feed
   def create_post entry, feed
-    entry_id = entry.id.encode('UTF-8')
+    entry_id = entry.entry_id.encode('UTF-8')
     if Post.filter(:entry_id => entry_id, :feed_id => feed.id).count == 0
       now = DateTime.now
 
