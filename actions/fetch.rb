@@ -53,7 +53,8 @@ class Tidal
     urls.slice!(0, 10).each do |url|
       params = {
           :on_success => lambda { |u, f| feed_fetch_success(u, f) },
-          :on_failure => lambda { |u, c, h, b| feed_fetch_failure(u, c, h, b) }}
+          :on_failure => lambda { |u, c, h, b| feed_fetch_failure(u, c, h, b) }},
+          :timeout => 20
       if timestamp
         params[:if_modified_since] = timestamp
       end
