@@ -43,45 +43,6 @@ module TZInfo
 
 end
 
-# Fix for ruby 1.9.2
-# https://github.com/flavorjones/loofah/pull/30
-module Loofah
-  module HTML5
-    module Scrub
-      class << self
-
-        def scrub_attributes(node)
-          node.attribute_nodes.each do |attr_node|
-            attr_name = if attr_node.namespace
-                          "#{attr_node.namespace.prefix}:#{attr_node.node_name}"
-                        else
-                          attr_node.node_name
-                        end
-            attr_node.remove unless HashedWhiteList::ALLOWED_ATTRIBUTES[attr_name]
-            if HashedWhiteList::ATTR_VAL_IS_URI[attr_name]
-              # this block lifted nearly verbatim from HTML5 sanitization
-              val_unescaped = CGI.unescapeHTML(attr_node.value).gsub(/`|[\u0000-\u0020\u007F]+|[\uC280-\uC2A0]/, '').downcase
-              if val_unescaped =~ /^[a-z0-9][-+.a-z0-9]*:/ and HashedWhiteList::ALLOWED_PROTOCOLS[val_unescaped.split(':')[0]].nil?
-                attr_node.remove
-              end
-            end
-            if HashedWhiteList::SVG_ATTR_VAL_ALLOWS_REF[attr_name]
-              attr_node.value = attr_node.value.gsub(/url\s*\(\s*[^#\s][^)]+?\)/m, ' ') if attr_node.value
-            end
-            if HashedWhiteList::SVG_ALLOW_LOCAL_HREF[node.name] && attr_name == 'xlink:href' && attr_node.value =~ /^\s*[^#\s].*/m
-              attr_node.remove
-            end
-          end
-          if node.attributes['style']
-            node['style'] = scrub_css(node.attributes['style'])
-          end
-        end
-      end
-    end
-  end
-end
-
-
 class Tidal
 
   # Fetch all the feeds
@@ -108,6 +69,10 @@ class Tidal
   # url: the fetched url
   # feed: the Feed object that has been fetched
   def feed_fetch_success url, feed
+    unless feed
+      # not modified
+      return
+    end
     begin
       f = Feed.filter(:feed_uri => url).first
       f.last_fetch = DateTime.now
@@ -133,6 +98,7 @@ class Tidal
       end
     rescue Exception => e
       p e
+      e.backtrace.each{|b| p}
     end
   end
 
@@ -234,14 +200,10 @@ class Tidal
   end
 
   def parse_date date
-    begin
-      DateTime.rfc2822(date)
-    rescue ArgumentError
-      begin
-        DateTime.xmlschema(date)
-      rescue ArgumentError
-        DateTime.parse(date)
-      end
+    if date
+      date.to_datetime
+    else
+      DateTime.now
     end
   end
 
