@@ -96,11 +96,18 @@ class Tidal
 
       # create the entries
       feed.entries.each do |entry|
-        create_post(entry, f)
+        begin
+          create_post(entry, f)
+        rescue Exception => e
+          p "#{url} #{e}"
+          p e.backtrace.join("\n")
+        end
+    end
+
       end
     rescue Exception => e
       p "#{url} #{e}"
-      e.backtrace.each{|b| p}
+      p e.backtrace.join("\n")
     end
   end
 
