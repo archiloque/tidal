@@ -55,7 +55,7 @@ class Tidal
           :on_success => lambda { |u, f| feed_fetch_success(u, f) },
           :on_failure => lambda { |u, c, h, b| feed_fetch_failure(u, c, h, b) },
           :timeout => 20
-        }
+      }
       if timestamp
         params[:if_modified_since] = timestamp
       end
@@ -102,9 +102,8 @@ class Tidal
           p "#{url} #{e}"
           p e.backtrace.join("\n")
         end
-    end
-
       end
+
     rescue Exception => e
       p "#{url} #{e}"
       p e.backtrace.join("\n")
