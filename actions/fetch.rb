@@ -100,13 +100,13 @@ class Tidal
           create_post(entry, f)
         rescue Exception => e
           p "#{url} #{e}"
-          p e.backtrace.join("\n")
+          STDOUT << "#{e.backtrace.join("\n")}\n"
         end
       end
 
     rescue Exception => e
       p "#{url} #{e}"
-      p e.backtrace.join("\n")
+      STDOUT << "#{e.backtrace.join("\n")}\n"
     end
   end
 
@@ -114,34 +114,35 @@ class Tidal
   # entry: the feed Entry
   # feed: the Feed
   def create_post entry, feed
-    entry_id = entry.entry_id.encode('UTF-8')
-    if Post.filter(:entry_id => entry_id, :feed_id => feed.id).count == 0
-      now = DateTime.now
+    if (entry_id = (entry.entry_id.andand.encode('UTF-8') || entry.url))
+      if Post.filter(:entry_id => entry_id, :feed_id => feed.id).count == 0
+        now = DateTime.now
 
-      if entry.published
-        published_at = parse_date(entry.published)
+        if entry.published
+          published_at = parse_date(entry.published)
 
-        # no old entries
-        if (now - published_at).to_f > 7.0
-          return
-        end
+          # no old entries
+          if (now - published_at).to_f > 7.0
+            return
+          end
 
-        # publish date is too much in the future -> set it to now
-        if (published_at - now).to_f > 1.0
+          # publish date is too much in the future -> set it to now
+          if (published_at - now).to_f > 1.0
+            published_at = now
+          end
+
+        else
           published_at = now
         end
 
-      else
-        published_at = now
+        Post.create(:content => adapt_content((entry.content || entry.summary).andand.encode('UTF-8').sanitize, feed.site_uri),
+                    :title => adapt_content(entry.title.andand.encode('UTF-8').sanitize, feed.site_uri),
+                    :uri => entry.url,
+                    :read => false,
+                    :feed_id => feed.id,
+                    :published_at => published_at,
+                    :entry_id => entry_id)
       end
-
-      Post.create(:content => adapt_content((entry.content || entry.summary).andand.sanitize, feed.site_uri),
-                  :title => adapt_content(entry.title.andand.sanitize, feed.site_uri),
-                  :uri => entry.url,
-                  :read => false,
-                  :feed_id => feed.id,
-                  :published_at => published_at,
-                  :entry_id => entry_id)
     end
   end
 
