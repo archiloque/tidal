@@ -8,7 +8,7 @@
            link = join_and_canonize(feed.site_uri, link)
          end %>
       <%= "<div class=\"postHeader\"><a href=\"#\" class=\"postExpander\" id=\"postExpander_#{post.id}\">#{(feed.display_content ? '–' : '+')}</a> " +
-                  "<a href=\"#{feed.site_uri}\">#{feed.name}</a> – #{link ? "<a href=\"#{link}\">#{post.title}</a>" : post.title}" +
+                  "<a target=\"_blank\" href=\"#{feed.site_uri}\">#{feed.name}</a> – #{link ? "<a target=\"_blank\" href=\"#{link}\">#{post.title}</a>" : post.title}" +
                   "<span class=\"postDate\"> #{post.published_at.strftime("%d/%m %H:%M")}</span>" +
                   "</div>" %>
       <%= "<div id=\"post_#{post.id}\" class=\"postContent#{(feed.display_content ? '' : ' hiddenPost')}\">#{post.content}</div>" %>
