@@ -1,330 +1,241 @@
 body {
-  background-color: #F5F5F5;
-  font-family: Helvetica, "Helvetica Neue", "Lucida Grande", Verdana, sans-serif;
-  font-size: 12px;
-  color: #111111;
+    background-color: #F5F5F5;
+    font-family: Helvetica, "Helvetica Neue", "Lucida Grande", Verdana, sans-serif;
+    font-size: 12px;
+    color: #111111;
 }
 
 * {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 img {
-  border: 0;
+    border: 0;
 }
 
 a {
-  text-decoration: none;
-  color: black;
-  background-color: #D0D0D0;
-  padding-right: 2px;
-  padding-left: 2px;
-  padding-top: 2px;
+    text-decoration: none;
+    color: black;
+    background-color: #D0D0D0;
+    padding-right: 2px;
+    padding-left: 2px;
+    padding-top: 2px;
 }
 
 a img {
-  background-color: #F5F5F5;
+    background-color: #F5F5F5;
 }
 
 a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
 #messages {
-  position: absolute;
-  top: 0;
-  right: 0;
-  color: black;
-  background-color: #F5F5F5;
-  font-weight: bold;
-  font-size: 14px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: black;
+    background-color: #F5F5F5;
+    font-weight: bold;
+    font-size: 14px;
 }
 
 #notice {
-  border: 2px solid green;
-  padding: 2px;
+    border: 2px solid green;
+    padding: 2px;
 }
 
 #warning {
-  border: 2px solid orange;
-  padding: 2px;
+    border: 2px solid orange;
+    padding: 2px;
 }
 
 #error {
-  border: 2px solid red;
-  padding: 2px;
+    border: 2px solid red;
+    padding: 2px;
 }
 
 /* posts */
 .postHeader {
-  padding-left: 20px;
-  font-size: 18px;
-  padding-bottom: 10px
+    padding-left: 10px;
+    font-size: 16px;
+    padding-bottom: 10px
 }
 
 .postExpander {
-  width: 12px;
-  display: inline-block;
+    width: 12px;
+    display: inline-block;
 }
 
 .postHeader a {
-  background-color: #F5F5F5;
+    background-color: #F5F5F5;
 }
 
 .postHeader a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
 .postDate {
-  font-size: 12px;
-  padding-left: 2px;
+    font-size: 12px;
+    padding-left: 2px;
 }
 
 .postContent {
-  margin-bottom: 50px;
-  padding-right: 20px;
+    margin-bottom: 50px;
+    margin-left: 10px;
+    margin-right: 10px;
+    line-height: 16px;
+}
 
-  margin-left: 20px;
-  padding-left: 10px;
-  border-left: #ccccdd solid 1px;
-  line-height: 16px;
+.postContent img {
+    max-width: 100%;
 }
 
 .postContent li {
-  margin-left: 5px;
-  margin-bottom: 5px;
-  list-style-type: square;
-  list-style-position: inside;
+    margin-left: 5px;
+    margin-bottom: 5px;
+    list-style-type: square;
+    list-style-position: inside;
 }
 
 .postContent p {
-  padding-bottom: 5px;
-  padding-top: 5px;
+    padding-bottom: 5px;
+    padding-top: 5px;
 }
 
 /* index page */
 
 #indexTitle {
-  padding-left: 30px;
-  padding-top: 10px;
-  font-size: 36px;
-  padding-bottom: 50px;
+    padding-left: 30px;
+    padding-top: 10px;
+    font-size: 36px;
+    padding-bottom: 50px;
 }
 
 #indexSidebar {
-  float: right;
-  width: 200px;
+    float: right;
+    width: 200px;
 
-  font-size: 10px;
+    font-size: 10px;
 
-  padding-left: 20px;
-  padding-right: 10px;
-  padding-bottom: 5px;
-  margin-top: 40px;
-  margin-right: 20px;
-  margin-left: 20px;
-  margin-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 10px;
+    padding-bottom: 5px;
+    margin-top: 40px;
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-bottom: 10px;
 
-  border-left: #ccccdd solid 2px;
-  border-bottom: #ccccdd solid 2px;
+    border-left: #ccccdd solid 2px;
+    border-bottom: #ccccdd solid 2px;
 
-  border-radius: 10px;
-  border-radius-bottomleft: 10px;
-  -moz-border-radius-bottomleft: 10px;
-  -webkit-border-radius-bottomleft: 10px;
+    border-radius: 10px;
+    border-radius-bottomleft: 10px;
 }
 
 #indexSidebar a {
-  font-weight: normal;
-  background-color: #F5F5F5;
+    font-weight: normal;
+    background-color: #F5F5F5;
 }
 
 #indexSidebar h4 {
-  padding-top: 10px;
-  font-size: 12px;
-  font-weight: normal;
+    padding-top: 10px;
+    font-size: 12px;
+    font-weight: normal;
 }
 
 #indexSidebar h5 {
-  font-weight: normal;
-  font-size: 12px;
-  padding-top: 2px;
-  padding-bottom: 1px;
+    font-weight: normal;
+    font-size: 12px;
+    padding-top: 2px;
+    padding-bottom: 1px;
 }
 
 #indexSidebar li {
-  padding-left: 10px;
-  list-style: none;
-  padding-bottom: 2px;
+    padding-left: 10px;
+    list-style: none;
+    padding-bottom: 2px;
+}
+
+#readerContent {
+    max-width: 700px;
+}
+
+.readerButtonsBar form {
+    display: inline;
+}
+
+.buttonReader {
+    font-size: 16px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+
+    border: #ccccdd solid 2px;
+    background-color: inherit;
+    border-radius: 10px;
+    width: 200px;
+    text-align: center;
+}
+
+.hiddenPost {
+    display: none;
 }
 
 /* admin page */
 
 #adminPageTitle {
-  padding-bottom: 10px;
-  padding-left: 20px;
-  font-size: 32px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    font-size: 32px;
 }
 
 fieldset {
-  padding: 5px;
-  border: 1px solid #b0b0b0;
-  margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid #b0b0b0;
+    margin-bottom: 10px;
 }
 
 fieldset li {
-  list-style: none;
-  padding-bottom: 4px;
+    list-style: none;
+    padding-bottom: 4px;
 }
 
 fieldset ul {
-  padding-bottom: 5px;
+    padding-bottom: 5px;
 }
 
 #adminContent {
-  position: absolute;
-  top: 25px;
-  left: 10px;
+    position: absolute;
+    top: 25px;
+    left: 10px;
 }
 
 #adminContent td {
-  vertical-align: top;
+    vertical-align: top;
 }
 
 #adminLeft {
-  padding-right: 20px;
-  width: 400px;
+    padding-right: 20px;
+    width: 400px;
 }
 
 #adminLeft li label {
-  display: inline-block;
-  width: 90px;
+    display: inline-block;
+    width: 90px;
 }
 
 #adminRight table {
-  border-collapse: collapse;
+    border-collapse: collapse;
 }
 
 #adminRight table td, #adminRight table th {
-  text-align: center;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border: 1px solid #b0b0b0;
-}
-
-/* reader */
-
-#readerSidebar {
-  position: absolute;
-  top: -10px;
-  padding-top: 20px;
-  padding-left: 10px;
-  padding-bottom: 5px;
-  width: 250px;
-  border-right: #ccccdd solid 2px;
-  border-bottom: #ccccdd solid 2px;
-
-  border-radius: 10px;
-  border-radius-bottomright: 10px;
-  -moz-border-radius-bottomright: 10px;
-  -webkit-border-radius-bottomright: 10px;
-}
-
-#readerSidebar a {
-  padding: 0;
-  background-color: #F5F5F5;
-}
-
-#displayAll {
-  font-weight: bold;
-}
-
-#readerSidebar li {
-  list-style: none;
-}
-
-.categoryLi {
-  padding-bottom: 4px;
-}
-
-.categoryInfo {
-  font-size: 12px;
-}
-
-.categoryWithElements {
-  font-weight: bold;
-}
-
-.categoryExpander {
-  margin-right: 4px;
-}
-
-.categoryLi li {
-  list-style: none;
-  padding-left: 15px;
-  padding-top: 1px;
-  padding-bottom: 2px;
-}
-
-.feedUL {
-  padding-top: 2px;
-  display: none;
-}
-
-.feedWithElements {
-  font-weight: bold;
-}
-
-#readerLogout {
-  padding-top: 5px;
-}
-#readerLogout a {
-  font-weight: normal;
-}
-
-#readerContent {
-  position: absolute;
-  left: 270px;
-  padding-top: 10px;
-  padding-bottom: 5px;
-}
-
-.feedTitle {
-  font-size: 24px;
-  padding-bottom: 10px;
-  padding-left: 20px;
-}
-
-.feedTitle a {
-  padding: 0;
-  background-color: #F5F5F5;
-}
-
-.feedContent {
-  padding-bottom: 30px;
-}
-
-.hiddenPost {
-  display: none;
-}
-
-#readOk {
-  font-size: 24px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  margin-left: 20px;
-
-  border: #ccccdd solid 2px;
-  border-radius: 10px;
-  -moz-border-radius: 10px;
-  -webkit-border-radius: 10px;
-  width: 200px;
-  text-align: center;
-}
-
-#readOk a {
-  background-color: #F5F5F5;
+    text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border: 1px solid #b0b0b0;
 }

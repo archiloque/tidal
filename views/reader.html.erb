@@ -1,7 +1,28 @@
-<div id="readerSidebar">
-  <div id="readerFeedsInfo"></div>
-  <h4 id="readerLogout"><a href="/logout">Logout</a></h4>
-</div>
+<h1 id="indexTitle">〰 Tidal, Archiloque's feed reader</h1>
+
 <div id="readerContent">
-Choose a category on the left to display the corresponding data.
+  <% for post in @posts %>
+      <% feed = @feeds_per_id[post.feed_id] %>
+      <% link = post.uri %>
+      <% if link
+           link = join_and_canonize(feed.site_uri, link)
+         end %>
+      <%= "<div class=\"postHeader\"><a href=\"#\" class=\"postExpander\" id=\"postExpander_#{post.id}\">#{(feed.display_content ? '–' : '+')}</a> " +
+                  "<a href=\"#{feed.site_uri}\">#{feed.name}</a> – #{link ? "<a href=\"#{link}\">#{post.title}</a>" : post.title}" +
+                  "<span class=\"postDate\"> #{post.published_at.strftime("%d/%m %H:%M")}</span>" +
+                  "</div>" %>
+      <%= "<div id=\"post_#{post.id}\" class=\"postContent#{(feed.display_content ? '' : ' hiddenPost')}\">#{post.content}</div>" %>
+  <% end %>
+
+</div>
+<div class="readerButtonsBar">
+  <% unless @posts.empty? %>
+      <form action="/reader" method="post">
+        <input name="displayedIds" type="hidden" value="<%= @posts.collect { |post| post.id }.join(',') %>">
+        <input type="submit" class="buttonReader" value="Mark as read"/>
+      </form>
+  <% end %>
+  <form action="/logout" method="get">
+    <input type="submit" class="buttonReader" value="Logout"/>
+  </form>
 </div>
