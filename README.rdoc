@@ -4,7 +4,7 @@ I've been fed up with bloglines bugs and don't like the cluttered interface of g
 
 = Where ?
 
-I have deployed it on heroku at {http://tidal.heroku.com/}[http://tidal.heroku.com/]
+I have deployed it on heroku at {http://tidal.archiloque.net}[http://tidal.archiloque.net]
 
 = How ?
 
@@ -27,7 +27,7 @@ Requirements: ruby and git
 * TIMEZONE the name of the timezone to use for example 'Europe/Paris', see http://www.twinsun.com/tz/tz-link.htm
 1. in the app directory run 'rackup'
 1. go to http://localhost:9292
-1 cron a call to http://localhost:9292/fetch to fetch the feeds for updates
+1. cron a call to http://localhost:9292/fetch to fetch the feeds for updates
 
 = Pages
 
