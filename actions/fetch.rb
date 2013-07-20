@@ -136,7 +136,7 @@ class Tidal
         end
 
         Post.create(:content => adapt_content((entry.content || entry.summary).andand.encode('UTF-8').andand.sanitize, feed.site_uri),
-                    :title => adapt_content(entry.title.andand.encode('UTF-8').sanitize, feed.site_uri),
+                    :title => adapt_content(entry.title.andand.encode('UTF-8').andand.sanitize, feed.site_uri),
                     :uri => entry.url,
                     :read => false,
                     :feed_id => feed.id,
