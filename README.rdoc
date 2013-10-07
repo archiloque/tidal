@@ -4,13 +4,16 @@ I've been fed up with bloglines bugs and don't like the cluttered interface of g
 
 = Where ?
 
-I have deployed it on heroku at {http://tidal.archiloque.net}[http://tidal.archiloque.net]
+I have deployed it on my server at {http://tidal.archiloque.net}[http://tidal.archiloque.net]
 
 = How ?
 
 {Feedzirra}[https://github.com/pauldix/feedzirra] does the heavy job of checking all the sites for new items.
 
 Then I just have to store the data and display them, this is done in ruby using Sinatra and Sequel.
+
+I'm using an {ssl client certificate}[http://en.wikipedia.org/wiki/Transport_Layer_Security#Client-authenticated_TLS_handshake]
+for authentication which requires some configuration on the frontal nginx / apache.
 
 Design copiously inspired from Sam Ruby's excellent {Planet Intertwingly}[http://planet.intertwingly.net/].
 
@@ -22,7 +25,7 @@ Requirements: ruby and git
 1. install the bundler gem if you don't have it ('gem install bundler')
 1. in the application directory run 'bundle install'
 1. add these variables to your environment or add them to the config.ru file using the ENV['VARIABLE_NAME'] = 'XXX' syntax
-* OPENID_URI your OpenId identifier if you want to use authentification for the reader functionality
+* HTTP_X_SSL_ISSUER the SSL issuer of your client certificate if you want to use authentification for the reader functionality
 * DATABASE_URL database url path, see {here}[http://sequel.rubyforge.org/rdoc/files/doc/opening_databases_rdoc.html] for details
 * TIMEZONE the name of the timezone to use for example 'Europe/Paris', see http://www.twinsun.com/tz/tz-link.htm
 1. in the app directory run 'rackup'
@@ -40,7 +43,7 @@ Requirements: ruby and git
 
 Exept files with their own copyright license:
 
-Copyright (c) 2010-2011, Julien Kirch
+Copyright (c) 2010-2013, Julien Kirch
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
