@@ -46,10 +46,7 @@ class Tidal < Sinatra::Base
     database.loggers << Logger.new(STDOUT)
   end
 
-  # open id
   use Rack::Session::Pool
-  require 'rack/openid'
-  use Rack::OpenID
 
   require_relative 'lib/models'
   require_relative 'lib/helpers'

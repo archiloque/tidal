@@ -10,9 +10,9 @@ class Tidal
   private
 
   def check_logged
-    if (!ENV['OPENID_URI']) || @user_logged
+    if (!ENV['HTTP_X_SSL_ISSUER']) || @user_logged
       true
-    elsif ENV['HTTP_X_SSL_ISSUER'] && (request.env['HTTP_X_SSL_ISSUER'] == ENV['HTTP_X_SSL_ISSUER'])
+    elsif request.env['HTTP_X_SSL_ISSUER'] == ENV['HTTP_X_SSL_ISSUER']
       session[:user] = ENV['HTTP_X_SSL_ISSUER']
       true
     else
@@ -22,7 +22,7 @@ class Tidal
   end
 
   def check_logged_ajax
-    if (!ENV['OPENID_URI']) || @user_logged
+    if (!ENV['HTTP_X_SSL_ISSUER']) || @user_logged
       true
     else
       body 'Logged users only'
