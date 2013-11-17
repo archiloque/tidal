@@ -4,8 +4,8 @@ class Tidal
   get '/admin' do
     if check_logged
       @title = 'Configuration'
-      @categories = database['select distinct(category) as c from feeds order by category'].map(:c)
-      @feeds = Feed.order(:category.asc, :name.asc)
+      @categories = DATABASE['select distinct(category) as c from feeds order by category'].map(:c)
+      @feeds = Feed.order(:category, :name)
       @js_include += ['jquery', 'tidal']
       erb :'admin.html'
     end

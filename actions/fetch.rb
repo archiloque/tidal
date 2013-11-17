@@ -43,12 +43,15 @@ module TZInfo
 
 end
 
+# Remove the itunes parser
+Feedzirra::Feed.feed_classes.delete_if{|c| c == Feedzirra::Parser::ITunesRSS }
+
 class Tidal
 
   # Fetch all the feeds
   get '/fetch' do
     multi = Curl::Multi.new
-    timestamp = Feed.order(:last_fetch.asc).first.last_fetch
+    timestamp = Feed.order(:last_fetch).first.last_fetch
     urls = Feed.collect { |f| f.feed_uri }
     urls.slice!(0, 10).each do |url|
       params = {

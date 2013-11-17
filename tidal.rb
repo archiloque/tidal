@@ -1,6 +1,3 @@
-require 'bundler'
-Bundler.setup
-
 require 'json'
 require 'logger'
 require 'tzinfo'
@@ -21,14 +18,16 @@ ENV['DATABASE_URL'] ||= "sqlite://#{Dir.pwd}/tidal.sqlite3"
 end
 
 require 'sinatra'
-require 'sinatra/sequel'
+require 'sequel'
 
-require 'sequel/extensions/named_timezones'
+Sequel.extension :named_timezones
 Sequel.default_timezone = TZInfo::Timezone.get(ENV['TIMEZONE'])
 Sequel::Model.raise_on_save_failure = true
 require 'erb'
 
 class Tidal < Sinatra::Base
+
+  DATABASE = Sequel.connect ENV['DATABASE_URL']
 
   set :views, File.dirname(__FILE__) + '/views'
   set :public_folder, File.dirname(__FILE__) + '/public'
@@ -43,7 +42,7 @@ class Tidal < Sinatra::Base
   set :app_file, File.join(root_dir, 'tidal.rb')
 
   configure :development do
-    database.loggers << Logger.new(STDOUT)
+    DATABASE.loggers << Logger.new(STDOUT)
   end
 
   use Rack::Session::Pool
@@ -60,7 +59,7 @@ class Tidal < Sinatra::Base
   end
 
   get '/' do
-    feeds = Feed.filter(:public => true).order(:category.asc, :name.asc)
+    feeds = Feed.filter(:public => true).order(:category, :name)
 
     @feeds_per_category = Hash.new { |hash, key| hash[key] = [] }
     @feeds_per_id = {}
@@ -68,7 +67,7 @@ class Tidal < Sinatra::Base
       @feeds_per_category[feed.category] << feed
       @feeds_per_id[feed.id] = feed
     end
-    @posts = Post.filter('feed_id in (select id from feeds where public is ?)', true).order(:published_at.desc).limit(100)
+    @posts = Post.filter('feed_id in (select id from feeds where public is ?)', true).order(Sequel.desc(:published_at)).limit(100)
     erb :'index.html'
   end
 
@@ -84,12 +83,12 @@ class Tidal < Sinatra::Base
         xml.id "#{ENV['SERVER_BASE_URL']}/"
         xml.logo '/apple-touch-icon.png'
 
-        last_post = Post.filter('feed_id in (select id from feeds where public is ?)', true).order(:published_at.desc).first
+        last_post = Post.filter('feed_id in (select id from feeds where public is ?)', true).order(Sequel.desc(:published_at)).first
         if last_post
           xml.updated Time.parse(last_post.published_at.to_s).xmlschema
         end
 
-        Post.filter('feed_id in (select id from feeds where public is ?)', true).order(:published_at.desc).limit(50).each do |post|
+        Post.filter('feed_id in (select id from feeds where public is ?)', true).order(Sequel.desc(:published_at)).limit(50).each do |post|
           xml << post.content
         end
       end

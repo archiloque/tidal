@@ -1,6 +1,3 @@
-require 'rubygems'
-require 'bundler'
-Bundler.setup
 require 'rest_client'
 
 unless ENV['SERVER_BASE_URL']
