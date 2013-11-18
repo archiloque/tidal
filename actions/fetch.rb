@@ -53,7 +53,7 @@ class Tidal
     multi = Curl::Multi.new
     timestamp = Feed.order(:last_fetch).first.andand.last_fetch
     urls = Feed.collect { |f| f.feed_uri }
-    urls.slice!(0, 10).each do |url|
+    urls.slice!(0, 30).each do |url|
       params = {
           :on_success => lambda { |u, f| feed_fetch_success(u, f) },
           :on_failure => lambda { |u, c, h, b, e| feed_fetch_failure(u, c, h, b, e) },
