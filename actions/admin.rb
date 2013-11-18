@@ -105,7 +105,7 @@ class Tidal
   end
 
   post '/purge' do
-    Post.filter({:read => true} & (:published_at <= (DateTime.now - 7))).delete
+    Post.where('read = ? and published_at <= ?', true, (DateTime.now - 7)).delete
     "OK"
   end
 
