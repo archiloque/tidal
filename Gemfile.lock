@@ -1,3 +1,13 @@
+GIT
+  remote: git://github.com/archiloque/feedzirra.git
+  revision: ce322453bd13c0bf49fc9f09a8b4fa1e3d7b097c
+  specs:
+    feedzirra (0.3.0)
+      curb (~> 0.8.1)
+      loofah (~> 1.2.1)
+      nokogiri (~> 1.6.0)
+      sax-machine (~> 0.2.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -5,11 +15,6 @@ GEM
     andand (1.3.3)
     builder (3.2.2)
     curb (0.8.5)
-    feedzirra (0.3.0)
-      curb (~> 0.8.1)
-      loofah (~> 1.2.1)
-      nokogiri (~> 1.6.0)
-      sax-machine (~> 0.2.1)
     loofah (1.2.1)
       nokogiri (>= 1.4.4)
     mini_portile (0.5.2)
@@ -38,7 +43,7 @@ DEPENDENCIES
   addressable (= 2.3.5)
   andand (= 1.3.3)
   builder (= 3.2.2)
-  feedzirra (= 0.3.0)
+  feedzirra!
   nokogiri (= 1.6.0)
   pg
   rack-flash3 (= 1.0.5)

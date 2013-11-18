@@ -56,7 +56,7 @@ class Tidal
     urls.slice!(0, 10).each do |url|
       params = {
           :on_success => lambda { |u, f| feed_fetch_success(u, f) },
-          :on_failure => lambda { |u, c, h, b| feed_fetch_failure(u, c, h, b) },
+          :on_failure => lambda { |u, c, h, b, e| feed_fetch_failure(u, c, h, b, e) },
           :timeout => 20
       }
       if timestamp
@@ -73,7 +73,7 @@ class Tidal
   # When a fetch is successful
   # url: the fetched url
   # feed: the Feed object that has been fetched
-  def feed_fetch_success url, feed
+  def feed_fetch_success(url, feed)
     unless feed
       # not modified
       return
@@ -118,7 +118,7 @@ class Tidal
   # Create a post from an entry.
   # entry: the feed Entry
   # feed: the Feed
-  def create_post entry, feed
+  def create_post(entry, feed)
     if (entry_id = (entry.entry_id.andand.encode('UTF-8') || entry.url))
       if Post.filter(:entry_id => entry_id, :feed_id => feed.id).count == 0
         now = DateTime.now
@@ -156,20 +156,20 @@ class Tidal
   # response_code: the http response code
   # response_header: the response header
   # response_body: the response_body
-  def feed_fetch_failure url, response_code, response_header, response_body
+  def feed_fetch_failure(url, response_code, response_header, response_body, error_info)
     f = Feed.filter(:feed_uri => url).first
     f.last_fetch = DateTime.now
-    f.error_message = "Code #{response_code}: #{response_header}\n#{response_body}"
+    f.error_message = "Code #{response_code}: #{error_info}\n#{response_body}"
     f.save
   end
 
   # Fetch a unique feed
-  def fetch_feed url
+  def fetch_feed(url)
     multi = Curl::Multi.new
     urls = {}
     Feedzirra::Feed.add_url_to_multi(multi, url, urls, {}, {
         :on_success => lambda { |u, f| feed_fetch_success(u, f) },
-        :on_failure => lambda { |u, c, h, b| feed_fetch_failure(u, c, h, b) }})
+        :on_failure => lambda { |u, c, h, b, e| feed_fetch_failure(u, c, h, b, e) }})
     multi.perform
     "OK"
   end
@@ -177,7 +177,7 @@ class Tidal
   # Adapt content for reading it in a website:
   # - remove the scripts tags and inline the noscript
   # - change the relative urls in image and links to absolute
-  def adapt_content content, site_url
+  def adapt_content(content, site_url)
     if content
 
       parsed_content = Nokogiri::HTML.fragment(content)
@@ -213,7 +213,7 @@ class Tidal
     end
   end
 
-  def parse_date date
+  def parse_date(date)
     if date
       date.to_datetime
     else

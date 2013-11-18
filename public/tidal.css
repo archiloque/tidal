@@ -32,7 +32,7 @@ a:hover {
 }
 
 .errorMessage {
-    white-space: pre;
+    white-space: pre-wrap;
     max-width: 500px;
 }
 
