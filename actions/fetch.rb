@@ -51,7 +51,6 @@ class Tidal
   # Fetch all the feeds
   get '/fetch' do
     multi = Curl::Multi.new
-    timestamp = Feed.order(:last_fetch).first.andand.last_fetch
     urls = Feed.collect { |f| f.feed_uri }
     urls.slice!(0, 30).each do |url|
       params = {
@@ -59,9 +58,6 @@ class Tidal
           :on_failure => lambda { |u, c, h, b, e| feed_fetch_failure(u, c, h, b, e) },
           :timeout => 60
       }
-      if timestamp
-        params[:if_modified_since] = timestamp
-      end
       Feedzirra::Feed.add_url_to_multi(multi, url, urls, {}, params)
     end
     multi.perform
