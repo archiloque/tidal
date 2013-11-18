@@ -3,7 +3,7 @@ class Tidal
 
   get '/admin' do
     if check_logged
-      @title = 'Configuration'
+      @title = 'Administration'
       @categories = DATABASE['select distinct(category) as c from feeds order by category'].map(:c)
       @feeds = Feed.order(:category, :name)
       @js_include += ['jquery', 'tidal']
@@ -53,6 +53,8 @@ class Tidal
         begin
           feed.update(:name => params[:name],
                       :category => params[:category],
+                      :site_uri => params[:site_uri],
+                      :feed_uri => params[:feed_uri],
                       :display_content => params[:display_content] || false,
                       :public => params[:public] || false)
           flash[:notice] = 'Feed updated'

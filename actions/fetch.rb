@@ -15,7 +15,7 @@ module TZInfo
       else
         # ambiguous result try to resolve
 
-        if !dst.nil?
+        if dst
           matches = results.find_all { |period| period.dst? == dst }
           results = matches if !matches.empty?
         end
@@ -44,7 +44,7 @@ module TZInfo
 end
 
 # Remove the itunes parser
-Feedzirra::Feed.feed_classes.delete_if{|c| c == Feedzirra::Parser::ITunesRSS }
+Feedzirra::Feed.feed_classes.delete_if { |c| c == Feedzirra::Parser::ITunesRSS }
 
 class Tidal
 
@@ -80,14 +80,15 @@ class Tidal
     end
     begin
       f = Feed.filter(:feed_uri => url).first
-      f.last_fetch = DateTime.now
+      now = DateTime.now
+      f.last_fetch = now
+      f.error_message = nil
 
       # the uri changed (redirection)
       if f.feed_uri != feed.feed_url
         f.feed_uri = feed.feed_url
       end
 
-      now = DateTime.now
       # the date of the last post
       if feed.entries.first
         d = feed.entries.first.published ? parse_date(feed.entries.first.published) : now
@@ -102,14 +103,15 @@ class Tidal
         begin
           create_post(entry, f)
         rescue Exception => e
-          p "#{url} #{e}"
-          STDOUT << "#{e.backtrace.join("\n")}\n"
+          f.error_message = e.backtrace.join("\n")
         end
       end
 
+      f.last_successful_fetch = now
     rescue Exception => e
-      p "#{url} #{e}"
-      STDOUT << "#{e.backtrace.join("\n")}\n"
+      f.error_message = e.backtrace.join("\n")
+    ensure
+      f.save
     end
   end
 
@@ -155,10 +157,10 @@ class Tidal
   # response_header: the response header
   # response_body: the response_body
   def feed_fetch_failure url, response_code, response_header, response_body
-    Feed.filter(:feed_uri => url).update(:last_fetch => DateTime.now)
-    if response_code != 304
-      p "Error #{url} #{response_code} #{response_body}"
-    end
+    f = Feed.filter(:feed_uri => url).first
+    f.last_fetch = DateTime.now
+    f.error_message = response_body
+    f.save
   end
 
   # Fetch a unique feed

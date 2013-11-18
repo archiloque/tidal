@@ -1,12 +1,12 @@
 <script type="text/javascript">
   <%= "var feeds = #{@feeds.inject({}) do |hash, feed|
-  hash[feed.id] = {:name => feed.name, :category => feed.category, :display_content => feed.display_content, :public =>feed.public}
+  hash[feed.id] = {:name => feed.name, :category => feed.category, :display_content => feed.display_content, :public =>feed.public, :site_uri => feed.site_uri, :feed_uri => feed.feed_uri}
   hash
 end.to_json};" %>;
 </script>
 
 <div id="adminContent">
-  <div id="adminPageTitle">Configuration</div>
+  <div id="adminPageTitle">Administration</div>
   <table id="adminMainTable">
     <tr>
       <td>
@@ -53,6 +53,8 @@ end.to_json};" %>;
                   <%= display_feeds_select(@feeds, 'edit_feed_select') %>
                   <%= input_text('name', 'Name', '', 30, 'edit_feed_name') %>
                   <%= input_text('category', 'Category', '', 30, 'edit_feed_category') %>
+                  <%= input_text('site_uri', 'Site Uri', '', 50, 'edit_site_uri') %>
+                  <%= input_text('feed_uri', 'Feed Uri', '', 50, 'edit_feed_uri') %>
                   <%= input_checkbox('display_content', 'Display Content', true, 'edit_feed_display_content') %>
                   <%= input_checkbox('public', 'Public', true, 'edit_feed_public') %>
                 </ul>
@@ -114,9 +116,11 @@ end.to_json};" %>;
                   <th>Display content</th>
                   <th>Public</th>
                   <th>Last fetch</th>
+                  <th>Last successful fetch</th>
                   <th>Last post</th>
                   <th>Site URI</th>
                   <th>Feed URI</th>
+                  <th>Error Message</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -127,9 +131,11 @@ end.to_json};" %>;
                     <td><%= feed.display_content ? 'yes' : 'no' %></td>
                     <td><%= feed.public ? 'yes' : 'no' %></td>
                     <td><%= display_date_time(feed.last_fetch) %></td>
+                    <td><%= display_date_time(feed.last_successful_fetch) %></td>
                     <td><%= display_date_time(feed.last_post) %></td>
                     <td><%= "<a href=\"#{feed.site_uri}\">#{feed.site_uri}</a>" %></td>
                     <td><%= "<a href=\"#{feed.feed_uri}\">#{feed.feed_uri}</a>" %></td>
+                    <td class="errorMessage"><%= feed.error_message %></td>
                   </tr>
                 <% end %>
                 </tbody>
