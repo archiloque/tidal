@@ -33,6 +33,7 @@ a:hover {
 
 .errorMessage {
     white-space: pre;
+    max-width: 500px;
 }
 
 #messages {
