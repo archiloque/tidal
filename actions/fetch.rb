@@ -159,7 +159,7 @@ class Tidal
   def feed_fetch_failure url, response_code, response_header, response_body
     f = Feed.filter(:feed_uri => url).first
     f.last_fetch = DateTime.now
-    f.error_message = response_body
+    f.error_message = "Code #{response_code}: #{response_header}\n#{response_body}"
     f.save
   end
 
