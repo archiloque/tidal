@@ -57,7 +57,7 @@ class Tidal
       params = {
           :on_success => lambda { |u, f| feed_fetch_success(u, f) },
           :on_failure => lambda { |u, c, h, b, e| feed_fetch_failure(u, c, h, b, e) },
-          :timeout => 20
+          :timeout => 60
       }
       if timestamp
         params[:if_modified_since] = timestamp
