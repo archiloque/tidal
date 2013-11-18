@@ -135,7 +135,7 @@ end.to_json};" %>;
                     <td><%= display_date_time(feed.last_post) %></td>
                     <td><%= "<a href=\"#{feed.site_uri}\">#{feed.site_uri}</a>" %></td>
                     <td><%= "<a href=\"#{feed.feed_uri}\">#{feed.feed_uri}</a>" %></td>
-                    <td class="errorMessage"><%= CGI.escapeHTML((feed.error_message || '').force_encoding('utf-8')[0..2000]) %></td>
+                    <td class="errorMessage"><%= CGI.escapeHTML((feed.error_message || '').encode("utf-8", "binary", :undef => :replace)[0..2000]) %></td>
                   </tr>
                 <% end %>
                 </tbody>
