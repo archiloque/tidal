@@ -50,6 +50,7 @@ class Tidal
 
   # Fetch all the feeds
   get '/fetch' do
+    Post.filter('published_at < ?', DateTime.now - 20).delete
     multi = Curl::Multi.new
     urls = Feed.collect { |f| f.feed_uri }
     urls.slice!(0, 30).each do |url|
