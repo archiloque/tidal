@@ -3,7 +3,7 @@ require 'logger'
 require 'tzinfo'
 require 'nokogiri'
 require 'andand'
-require 'feedzirra'
+require 'feedjira'
 
 require 'sinatra/base'
 require 'rack-flash'
@@ -11,6 +11,7 @@ require 'rack-flash'
 require 'builder'
 
 ENV['DATABASE_URL'] ||= "sqlite://#{Dir.pwd}/tidal.sqlite3"
+
 ['TIMEZONE'].each do |param|
   unless ENV[param]
     raise "#{param} env parameter is missing"

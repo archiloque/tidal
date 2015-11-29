@@ -44,25 +44,18 @@ module TZInfo
 end
 
 # Remove the itunes parser
-Feedzirra::Feed.feed_classes.delete_if { |c| c == Feedzirra::Parser::ITunesRSS }
+Feedjira::Feed.feed_classes.delete_if { |c| c == Feedjira::Parser::ITunesRSS }
 
 class Tidal
 
   # Fetch all the feeds
   get '/fetch' do
+    # Delete old posts
     Post.filter('published_at < ?', DateTime.now - 20).delete
-    multi = Curl::Multi.new
-    urls = Feed.collect { |f| f.feed_uri }
-    urls.slice!(0, 30).each do |url|
-      params = {
-          :on_success => lambda { |u, f| feed_fetch_success(u, f) },
-          :on_failure => lambda { |u, c, h, b, e| feed_fetch_failure(u, c, h, b, e) },
-          :timeout => 60
-      }
-      Feedzirra::Feed.add_url_to_multi(multi, url, urls, {}, params)
+    Feed.each do |feed|
+      fetch_feed(feed)
     end
-    multi.perform
-    "OK"
+    'OK'
   end
 
   private
@@ -70,11 +63,7 @@ class Tidal
   # When a fetch is successful
   # url: the fetched url
   # feed: the Feed object that has been fetched
-  def feed_fetch_success(url, feed)
-    unless feed
-      # not modified
-      return
-    end
+  def feed_fetch_success(url, fetched_feed)
     begin
       f = Feed.filter(:feed_uri => url).first
       now = DateTime.now
@@ -82,13 +71,13 @@ class Tidal
       f.error_message = nil
 
       # the uri changed (redirection)
-      if f.feed_uri != feed.feed_url
-        f.feed_uri = feed.feed_url
+      if f.feed_uri != fetched_feed.feed_url
+        f.feed_uri = fetched_feed.feed_url
       end
 
       # the date of the last post
-      if feed.entries.first
-        d = feed.entries.first.published ? parse_date(feed.entries.first.published) : now
+      if fetched_feed.entries.first
+        d = fetched_feed.entries.first.published ? parse_date(fetched_feed.entries.first.published) : now
         if (!f.last_post) || (d > f.last_post)
           f.last_post = d
         end
@@ -96,7 +85,7 @@ class Tidal
       f.save
 
       # create the entries
-      feed.entries.each do |entry|
+      fetched_feed.entries.each do |entry|
         begin
           create_post(entry, f)
         rescue Exception => e
@@ -148,27 +137,17 @@ class Tidal
     end
   end
 
-  # When fetching a feed failed
-  # url: the fetched url
-  # response_code: the http response code
-  # response_header: the response header
-  # response_body: the response_body
-  def feed_fetch_failure(url, response_code, response_header, response_body, error_info)
-    f = Feed.filter(:feed_uri => url).first
-    f.last_fetch = DateTime.now
-    f.error_message = "Code #{response_code}: #{error_info}\n#{response_body}"
-    f.save
-  end
-
   # Fetch a unique feed
-  def fetch_feed(url)
-    multi = Curl::Multi.new
-    urls = {}
-    Feedzirra::Feed.add_url_to_multi(multi, url, urls, {}, {
-        :on_success => lambda { |u, f| feed_fetch_success(u, f) },
-        :on_failure => lambda { |u, c, h, b, e| feed_fetch_failure(u, c, h, b, e) }})
-    multi.perform
-    "OK"
+  def fetch_feed(feed)
+    begin
+      fetched_feed = Feedjira::Feed.fetch_and_parse(feed.feed_uri)
+      feed_fetch_success(feed.feed_uri, fetched_feed)
+    rescue Exception => e
+      feed.last_fetch = DateTime.now
+      feed.error_message = e.message
+      feed.save
+    end
+    'OK'
   end
 
   # Adapt content for reading it in a website:

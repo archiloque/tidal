@@ -21,7 +21,7 @@ class Tidal
 
   post '/reader' do
     unless params[:displayedIds].blank?
-      Post.filter(:id => params[:displayedIds].split(',').collect{|i| i.to_i }).update(:read => true)
+      Post.filter(:id => params[:displayedIds].split(',').collect { |i| i.to_i }).update(:read => true)
     end
     redirect '/reader'
   end

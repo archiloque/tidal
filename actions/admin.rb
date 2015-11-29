@@ -15,15 +15,15 @@ class Tidal
     if check_logged
       category = params[:category_text].blank? ? params[:category_select] : params[:category_text]
       begin
-        Feed.create(:name => params[:name],
-                    :category => category,
-                    :site_uri => params[:site_uri],
-                    :feed_uri => params[:feed_uri],
-                    :display_content => params[:display_content] || false,
-                    :public => params[:public] || false,
-                    :last_fetch => DateTime.civil(1900, 1, 1))
+        feed = Feed.create(:name => params[:name],
+                           :category => category,
+                           :site_uri => params[:site_uri],
+                           :feed_uri => params[:feed_uri],
+                           :display_content => params[:display_content] || false,
+                           :public => params[:public] || false,
+                           :last_fetch => DateTime.civil(1900, 1, 1))
         flash[:notice] = 'Feed added'
-        fetch_feed params[:feed_uri]
+        fetch_feed feed
       rescue Sequel::ValidationFailed => e
         flash[:error] = "Error during feed creation #{e}"
       end
