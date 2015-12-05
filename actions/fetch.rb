@@ -1,4 +1,5 @@
 require 'addressable/uri'
+require 'typhoeus'
 
 # fetching the feeds
 
@@ -52,52 +53,68 @@ class Tidal
   get '/fetch' do
     # Delete old posts
     Post.filter('published_at < ?', DateTime.now - 20).delete
+
+    hydra = Typhoeus::Hydra.new
     Feed.each do |feed|
-      fetch_feed(feed)
+      request = Typhoeus::Request.new(feed.feed_uri)
+      request.on_complete do |response|
+        if response.code == 200
+          begin
+            fetched_feed = Feedjira::Feed.parse(response.body)
+            feed_fetch_success(feed, response.effective_url, fetched_feed)
+          rescue Exception => e
+            feed.last_fetch = DateTime.now
+            feed.error_message = e.message
+            feed.save
+          end
+        else
+          feed.last_fetch = DateTime.now
+          feed.error_message = response.body
+          feed.save
+        end
+      end
+      hydra.queue request
     end
+    hydra.run
     'OK'
   end
 
   private
 
   # When a fetch is successful
-  # url: the fetched url
-  # feed: the Feed object that has been fetched
-  def feed_fetch_success(url, fetched_feed)
+  # @param feed [Feed] the feed object
+  # @param feed_url [String] the feed url
+  # @param fetched_feed [Feedjira::Feed] the Feed object that has been fetched
+  def feed_fetch_success(feed, feed_url, fetched_feed)
     begin
-      f = Feed.filter(:feed_uri => url).first
       now = DateTime.now
-      f.last_fetch = now
-      f.error_message = nil
-
-      # the uri changed (redirection)
-      if f.feed_uri != fetched_feed.feed_url
-        f.feed_uri = fetched_feed.feed_url
-      end
+      feed.last_fetch = now
+      feed.error_message = nil
+      feed.feed_uri = feed_url
 
       # the date of the last post
       if fetched_feed.entries.first
         d = fetched_feed.entries.first.published ? parse_date(fetched_feed.entries.first.published) : now
-        if (!f.last_post) || (d > f.last_post)
-          f.last_post = d
+        if (!feed.last_post) || (d > feed.last_post)
+          feed.last_post = d
         end
       end
-      f.save
+      feed.save
 
       # create the entries
       fetched_feed.entries.each do |entry|
         begin
-          create_post(entry, f)
+          create_post(entry, feed)
         rescue Exception => e
-          f.error_message = e.backtrace.join("\n")
+          feed.error_message = e.backtrace.join("\n")
         end
       end
 
-      f.last_successful_fetch = now
+      feed.last_successful_fetch = now
     rescue Exception => e
-      f.error_message = e.backtrace.join("\n")
+      feed.error_message = e.backtrace.join("\n")
     ensure
-      f.save
+      feed.save
     end
   end
 
@@ -141,7 +158,7 @@ class Tidal
   def fetch_feed(feed)
     begin
       fetched_feed = Feedjira::Feed.fetch_and_parse(feed.feed_uri)
-      feed_fetch_success(feed.feed_uri, fetched_feed)
+      feed_fetch_success(feed, fetched_feed.feed_url, fetched_feed)
     rescue Exception => e
       feed.last_fetch = DateTime.now
       feed.error_message = e.message

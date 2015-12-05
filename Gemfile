@@ -9,8 +9,9 @@ gem 'nokogiri', '~> 1.6.6.4'
 gem 'andand', '~> 1.3.3'
 gem 'builder', '~> 3.2.2'
 gem 'feedjira', '~> 2.0.0'
+gem 'typhoeus', '~> 0.8.0'
 gem 'pg'
-
+gem 'sqlite3'
 group :production do
   gem 'foreman'
   gem 'unicorn'
