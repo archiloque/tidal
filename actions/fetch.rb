@@ -28,7 +28,7 @@ class Tidal
           end
         else
           feed.last_fetch = DateTime.now
-          feed.error_message = response.body
+          feed.error_message = "Code : #{response.code}\n#{response.body}"
           feed.save
         end
       end
