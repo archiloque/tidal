@@ -1,7 +1,9 @@
 <h1 id="indexTitle">〰 Tidal, Archiloque's feed reader</h1>
 
 <div id="readerContent">
+  <% @posts_ids = [] %>
   <% for post in @posts %>
+      <% @posts_ids << post.id %>
       <% feed = @feeds_per_id[post.feed_id] %>
       <% link = post.uri %>
       <% if link
@@ -16,9 +18,9 @@
 
 </div>
 <div class="readerButtonsBar">
-  <% unless @posts.empty? %>
+  <% unless @posts_ids.empty? %>
       <form action="/reader" method="post">
-        <input name="displayedIds" type="hidden" value="<%= @posts.collect { |post| post.id }.join(',') %>">
+        <input name="displayedIds" type="hidden" value="<%= @posts_ids.join(',') %>">
         <input type="submit" class="buttonReader" value="Mark as read"/>
       </form>
   <% end %>

@@ -1,4 +1,3 @@
-var feeds_information = [];
 var displayedIds = [];
 
 $(function () {

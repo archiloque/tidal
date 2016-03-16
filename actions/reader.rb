@@ -10,7 +10,6 @@ class Tidal
           filter('posts.read = ?', false).
           order(:category, :name, Sequel.desc(:published_at)).
           select_all(:posts)
-
       @feeds_per_id = {}
       Feed.each do |feed|
         @feeds_per_id[feed.id] = feed

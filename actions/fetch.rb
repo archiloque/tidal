@@ -3,47 +3,6 @@ require 'typhoeus'
 
 # fetching the feeds
 
-# Don't care about ambiguous timezones
-module TZInfo
-  class Timezone
-    def period_for_local(local, dst = nil)
-      results = periods_for_local(local)
-
-      if results.empty?
-        raise PeriodNotFound
-      elsif results.size < 2
-        results.first
-      else
-        # ambiguous result try to resolve
-
-        if dst
-          matches = results.find_all { |period| period.dst? == dst }
-          results = matches if !matches.empty?
-        end
-
-        if results.size < 2
-          results.first
-        else
-          # still ambiguous, try the block
-
-          if block_given?
-            results = yield results
-          end
-
-          if results.is_a?(TimezonePeriod)
-            results
-          else
-            # hack is here
-            results.first
-          end
-        end
-      end
-    end
-
-  end
-
-end
-
 # Remove the itunes parser
 Feedjira::Feed.feed_classes.delete_if { |c| c == Feedjira::Parser::ITunesRSS }
 
@@ -93,10 +52,10 @@ class Tidal
       feed.feed_uri = feed_url
 
       # the date of the last post
-      if fetched_feed.entries.first
-        d = fetched_feed.entries.first.published ? parse_date(fetched_feed.entries.first.published) : now
-        if (!feed.last_post) || (d > feed.last_post)
-          feed.last_post = d
+      if fetched_feed.entries.first && fetched_feed.entries.first.published
+        last_post_date = fetched_feed.entries.first.published.to_datetime
+        if (!feed.last_post) || (last_post_date > feed.last_post)
+          feed.last_post = last_post_date
         end
       end
       feed.save
@@ -127,7 +86,7 @@ class Tidal
         now = DateTime.now
 
         if entry.published
-          published_at = parse_date(entry.published)
+          published_at = entry.published.to_datetime
 
           # no old entries
           if (now - published_at).to_f > 7.0
@@ -142,29 +101,17 @@ class Tidal
         else
           published_at = now
         end
-
-        Post.create(:content => adapt_content((entry.content || entry.summary).andand.encode('UTF-8').andand.sanitize, feed.site_uri),
-                    :title => adapt_content(entry.title.andand.encode('UTF-8').andand.sanitize, feed.site_uri),
-                    :uri => entry.url,
-                    :read => false,
-                    :feed_id => feed.id,
-                    :published_at => published_at,
-                    :entry_id => entry_id)
+        DATABASE.transaction do
+          Post.create(:content => adapt_content((entry.content || entry.summary).andand.encode('UTF-8').andand.sanitize, feed.site_uri),
+                      :title => adapt_content(entry.title.andand.encode('UTF-8').andand.sanitize, feed.site_uri),
+                      :uri => entry.url,
+                      :read => false,
+                      :feed_id => feed.id,
+                      :published_at => published_at,
+                      :entry_id => entry_id)
+        end
       end
     end
-  end
-
-  # Fetch a unique feed
-  def fetch_feed(feed)
-    begin
-      fetched_feed = Feedjira::Feed.fetch_and_parse(feed.feed_uri)
-      feed_fetch_success(feed, fetched_feed.feed_url, fetched_feed)
-    rescue Exception => e
-      feed.last_fetch = DateTime.now
-      feed.error_message = e.message
-      feed.save
-    end
-    'OK'
   end
 
   # Adapt content for reading it in a website:
@@ -203,14 +150,6 @@ class Tidal
       end
 
       parsed_content.to_s
-    end
-  end
-
-  def parse_date(date)
-    if date
-      date.to_datetime
-    else
-      DateTime.now
     end
   end
 

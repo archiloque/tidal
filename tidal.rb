@@ -7,7 +7,7 @@ require 'feedjira'
 
 require 'sinatra/base'
 require 'rack-flash'
-
+require 'tilt/erb'
 require 'builder'
 
 ENV['DATABASE_URL'] ||= "sqlite://#{Dir.pwd}/tidal.sqlite3"

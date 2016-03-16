@@ -6,7 +6,6 @@ Sequel.migration do
       Text :content, :text => true
       foreign_key :feed_id, :feeds
       boolean :read, :null => true, :default => false, :index => true, :unique => false
-
     end
   end
 end
